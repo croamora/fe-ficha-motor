@@ -1,0 +1,145 @@
+<div class="blank-layout-container justify-content-center">
+  <div class="auth-wrapper">
+    <div class="position-relative shaper-wrapper">
+      <div class="w-100 position-relative rounded bg-white auth-card">
+        <div class="auth-body">
+          <a [routerLink]="['/dashboards/dashboard1']" class="m-t-20 d-flex">
+            <img
+              src="./assets/images/logos/base-logo.png"
+              style="width: 300px;"
+              class="align-middle m-2"
+              alt="logo"
+            />
+          </a>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="align-items-center justify-content-center d-none d-lg-flex">
+                <img
+                  src="/assets/images/backgrounds/login.png"
+                  alt="login"
+                  style="max-width: 500px"
+                />
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="d-flex align-items-start align-items-lg-center justify-content-center">
+                <div class="row justify-content-center w-100">
+                  <div class="col-lg-11">
+                    <span class="f-s-14 d-block mat-body-1 m-t-8">
+                      Regístrate para comenzar
+                    </span>
+
+                    <form class="m-t-30" [formGroup]="form" (ngSubmit)="submit()">
+                      <!-- Nombre -->
+                      <mat-label class="mat-subtitle-2 f-s-14 f-w-600 d-block">Nombre</mat-label>
+                      <mat-form-field appearance="outline" class="w-100" color="primary">
+                        <input matInput formControlName="uname" />
+                        <mat-hint *ngIf="f['uname'].touched && f['uname'].invalid">
+                          <span *ngIf="f['uname'].hasError('required')" class="text-error">El nombre es obligatorio.</span>
+                          <span *ngIf="f['uname'].hasError('minlength')" class="text-error">
+                            El nombre debe tener al menos 6 caracteres.
+                          </span>
+                        </mat-hint>
+                      </mat-form-field>
+
+                      <!-- Teléfono -->
+                      <mat-label class="mat-subtitle-2 f-s-14 f-w-600 d-block">Teléfono</mat-label>
+                      <mat-form-field appearance="outline" class="w-100" color="primary">
+                        <span matPrefix>+569&nbsp;</span>
+                        <input matInput formControlName="phone" maxlength="8" />
+                        <mat-hint *ngIf="f['phone'].touched && f['phone'].invalid">
+                          <span *ngIf="f['phone'].hasError('required')" class="text-error">
+                            El teléfono es obligatorio.
+                          </span>
+                          <span *ngIf="f['phone'].hasError('pattern')" class="text-error">
+                            El teléfono debe contener exactamente 8 dígitos.
+                          </span>
+                        </mat-hint>
+                      </mat-form-field>
+
+                      <!-- Email -->
+                      <mat-label class="mat-subtitle-2 f-s-14 f-w-600 d-block">Correo Electrónico</mat-label>
+                      <mat-form-field appearance="outline" class="w-100" color="primary">
+                        <input matInput type="email" formControlName="email" />
+                        <mat-hint *ngIf="f['email'].touched && f['email'].invalid">
+                          <span *ngIf="f['email'].hasError('required')" class="text-error">El correo es obligatorio.</span>
+                          <span *ngIf="f['email'].hasError('email')" class="text-error">El correo no es válido.</span>
+                        </mat-hint>
+                      </mat-form-field>
+
+                      <!-- Contraseña -->
+                      <mat-label class="mat-subtitle-2 f-s-14 f-w-600 d-block">Contraseña</mat-label>
+                      <mat-form-field appearance="outline" class="w-100" color="primary">
+                        <input
+                          matInput
+                          [type]="hidePassword1 ? 'password' : 'text'"
+                          formControlName="password"
+                        />
+                        <button
+                          mat-icon-button
+                          matSuffix
+                          (click)="togglePassword1Visibility()"
+                          [attr.aria-label]="'Mostrar/Ocultar contraseña'"
+                          [attr.type]="'button'"
+                        >
+                          <mat-icon>{{ hidePassword1 ? 'visibility_off' : 'visibility' }}</mat-icon>
+                        </button>
+                        <mat-hint *ngIf="f['password'].touched && f['password'].invalid">
+                          <span *ngIf="f['password'].hasError('required')" class="text-error">
+                            La contraseña es obligatoria.
+                          </span>
+                          <span *ngIf="f['password'].hasError('minlength')" class="text-error">
+                            La contraseña debe tener al menos 8 caracteres.
+                          </span>
+                        </mat-hint>
+                      </mat-form-field>
+
+                      <!-- Confirmar Contraseña -->
+                      <mat-label class="mat-subtitle-2 f-s-14 f-w-600 d-block">Confirmar Contraseña</mat-label>
+                      <mat-form-field appearance="outline" class="w-100" color="primary">
+                        <input
+                          matInput
+                          [type]="hidePassword2 ? 'password' : 'text'"
+                          formControlName="confirmPassword"
+                        />
+                        <button
+                          mat-icon-button
+                          matSuffix
+                          (click)="togglePassword2Visibility()"
+                          [attr.aria-label]="'Mostrar/Ocultar confirmar contraseña'"
+                          [attr.type]="'button'"
+                        >
+                          <mat-icon>{{ hidePassword2 ? 'visibility_off' : 'visibility' }}</mat-icon>
+                        </button>
+                        <mat-hint *ngIf="f['confirmPassword'].touched && f['confirmPassword'].invalid">
+                          <span *ngIf="f['confirmPassword'].hasError('required')" class="text-error">
+                            Confirmar contraseña es obligatorio.
+                          </span>
+                        </mat-hint>
+                        <mat-hint *ngIf="form.errors?.['passwordMismatch']">
+                          <span class="text-error">Las contraseñas no coinciden.</span>
+                        </mat-hint>
+                      </mat-form-field>
+
+
+                      <button mat-flat-button color="primary" class="w-100" [disabled]="!form.valid">
+                        Crear
+                      </button>
+                    </form>
+
+                    <span class="d-block f-w-500 d-block m-t-24">
+                      ¿Ya tienes cuenta?
+                      <a [routerLink]="['/authentication/login']" class="text-decoration-none text-primary f-w-500 f-s-14">
+                        Ingresar
+                      </a>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

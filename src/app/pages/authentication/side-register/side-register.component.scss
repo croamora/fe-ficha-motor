@@ -1,0 +1,10 @@
+.mat-mdc-text-field-prefix {
+  background-color: #f0f0f0; /* Color de fondo */
+  padding: 0 8px; /* Espaciado interno */
+  height: 100%; /* Asegura que ocupe toda la altura del input */
+  display: flex;
+  align-items: center; /* Centra verticalmente el contenido */
+  border-right: 1px solid #ccc; /* Línea divisoria opcional */
+  font-weight: bold; /* Negrita opcional */
+  color: #333; /* Color del texto */
+}

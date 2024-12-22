@@ -1,0 +1,51 @@
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-header class="header-with-button">
+      <mat-card-title class="m-b-0">Mis Vehículos</mat-card-title>
+      <button 
+        mat-flat-button 
+        color="primary" 
+        matBadge="8" 
+        matBadgePosition="before" 
+        matBadgeColor="accent"
+        (click)="openCreateModal()"
+      >
+        <i-tabler class="custom-icon" name="plus"></i-tabler>
+        <span class="button-text">Agregar</span>
+      </button>
+    </mat-card-header>
+</mat-card>
+
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-content class="b-t-1">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    @for(vehiculo of vehiculos; track vehiculo.nombre) {
+                    <div class="col-sm-6 col-lg-3">
+                        <mat-card class="cardWithShadow overflow-hidden" (click)="navigateTo(vehiculo.id)" style="cursor: pointer;">
+                            <a>
+                                <img src="{{ vehiculo.img }}" alt="imgSrc" class="w-100" style="height: 200px;" mat-card-image />
+                            </a>
+                            <mat-card-content class="p-b-24 p-t-12 position-relative" style="padding: 10px;">
+                                <!-- <button mat-mini-fab color="primary" class="icon-30 cart-btn" matTooltip="Add to Cart">
+                                    <i-tabler name="map-pin" class="icon-16"></i-tabler>
+                                </button> -->
+                                <mat-card-title class="mat-headline-2 f-s-16 m-b-4">{{
+                                    vehiculo.nombre
+                                    }}</mat-card-title>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <h6 class="mat-body-2 f-w-600"> <i-tabler name="map-pin" class="icon-16"></i-tabler> {{ vehiculo.direccion }}</h6>
+                                    </div>
+
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+      </mat-card-content>
+</mat-card>

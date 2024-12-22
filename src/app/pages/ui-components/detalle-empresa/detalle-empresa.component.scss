@@ -1,0 +1,116 @@
+/* Contenedor del banner */
+.banner-container {
+    position: relative;
+    width: 100%;
+    height: 200px; /* Ajusta la altura del banner */
+    overflow: hidden;
+    background-color: #f0f0f0; /* Color de fondo para mostrar mientras carga */
+  }
+  
+  .banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen cubra todo el espacio */
+  }
+  
+  /* Contenedor de la imagen de perfil */
+  .profile-container {
+    position: absolute;
+    bottom: -40px; /* Mueve la imagen hacia abajo, superpuesta sobre el banner */
+    left: 50%;
+    transform: translateX(-50%); /* Centra horizontalmente */
+    border: 4px solid white; /* Borde blanco alrededor de la imagen */
+    border-radius: 50%; /* Hace la imagen circular */
+    width: 80px; /* Tamaño de la imagen de perfil */
+    height: 80px;
+    overflow: hidden;
+    background-color: #fff;
+  }
+  
+  .profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Asegura que la imagen de perfil se ajuste bien */
+    border-radius: 50%; /* Asegura que siga siendo circular */
+  }
+  
+  /* Ajustes adicionales para el mat-card */
+  .card-header {
+    position: relative;
+    padding: 0;
+  }
+  
+  .mat-card-content {
+    padding-top: 50px; /* Agrega espacio para compensar la superposición de la imagen de perfil */
+    text-align: center;
+  }
+  
+  h3 {
+    margin-top: 20px;
+    font-size: 1.5rem;
+  }
+  
+  p {
+    color: #666;
+  }
+  
+  google-map {
+    display: block;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .detalle-empresa {
+    text-align: center; /* Centrar contenido */
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center; /* Centrar los botones horizontalmente */
+    gap: 15px; /* Separación entre botones */
+    margin-top: 20px; /* Espaciado superior */
+  }
+  
+  .custom-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Separación entre el ícono y el texto */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  
+    i.tabler {
+      font-size: 20px;
+    }
+  
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  /* Estilo específico para el botón de Google Maps */
+  .maps-button {
+    background-color: #4285f4; /* Azul de Google */
+    color: white;
+  
+    &:hover {
+      background-color: #3367d6;
+    }
+  }
+  
+  /* Estilo específico para el botón de WhatsApp */
+  .whatsapp-button {
+    background-color: #25d366; /* Verde de WhatsApp */
+    color: white;
+  
+    &:hover {
+      background-color: #1da851;
+    }
+  }
+  

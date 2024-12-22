@@ -1,0 +1,81 @@
+.header-with-button {
+    display: flex; /* Utiliza flexbox para organizar elementos */
+    align-items: center; /* Centra verticalmente el título y el botón */
+    justify-content: space-between; /* Distribuye el espacio entre los elementos */
+}
+
+.header-with-button button {
+    margin-left: auto; /* Empuja el botón hacia el extremo derecho */
+}
+
+
+::ng-deep .mdc-button__label {
+    display: flex; /* Asegura que el ícono y el texto se alineen correctamente */
+    align-items: flex-start; /* Alinea el contenido hacia la parte superior */
+    gap: 4px; /* Espacio entre el ícono y el texto */
+}
+  
+.button-text {
+    font-size: 14px; /* Ajusta el tamaño del texto */
+    position: relative;
+    font-weight: bold;
+    top: 1px; /* Mueve el texto ligeramente hacia arriba */
+}
+
+.card-header {
+    display: flex; /* Flexbox para organizar elementos */
+    justify-content: space-between; /* Título a la izquierda, botón al final */
+    align-items: center; /* Centra verticalmente */
+}
+
+.paginator-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+  }
+  
+  .mat-mdc-paginator-range-label{
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    text-align: center; /* Opcional: centra el texto */
+  }
+
+  .mat-mdc-paginator-container {
+    display: flex;
+    flex-direction: column; /* Cambia el diseño a columnas */
+    align-items: center; /* Centra los elementos horizontalmente */
+  }
+  
+  .mat-mdc-paginator-range-actions {
+    order: 1; /* Mantén la sección de los botones en la parte superior */
+    margin-top: 8px; /* Agrega espacio entre las filas */
+  }
+  
+  .mat-mdc-paginator-page-size {
+    min-width: 196px;
+    order: 2; /* Mueve la sección de "Items per page" hacia abajo */
+  }
+
+  
+  .mat-mdc-paginator-page-size-label {
+    margin-right: 8px; /* Opcional: agrega margen al texto */
+  }
+  
+  .mat-mdc-form-field {
+    display: inline-block; /* Ajusta el tamaño del selector */
+  }
+  
+  .mat-mdc-card-content{
+    padding: 30px;
+}
+
+  @media (max-width: 600px) {
+    .mat-mdc-paginator-range-label {
+      font-size: 8px; /* Reduce el tamaño de fuente */
+      white-space: nowrap; /* Asegura que el texto esté en una línea */
+    }
+
+    .mat-mdc-card-content{
+        padding: 10px;
+    }
+  }

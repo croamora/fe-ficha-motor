@@ -1,0 +1,41 @@
+<mat-card class="cardWithShadow theme-card overflow-hidden">
+    <mat-card-header class="card-header" style="padding: 0px;">
+      <!-- Imagen del banner -->
+      <div class="banner-container">
+        <img src="{{ taller.img }}" alt="Banner Image" class="banner-img" />
+      </div>
+      <!-- Imagen de perfil -->
+      <div class="profile-container">
+        <img [src]="taller.imgProfile" alt="Profile Image" class="profile-img" />
+      </div>
+    </mat-card-header>
+  
+    <mat-card-content class="b-t-1">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h3>{{ taller.nombre }}</h3>
+          <p>{{ taller.direccion }}</p>
+        </div>
+      </div>
+
+
+      
+      <!-- Contenedor para centrar los botones -->
+      <div class="button-container">
+        <!-- Botón "Cómo llegar" -->
+        <button class="custom-button maps-button" (click)="openGoogleMaps()">
+          <i-tabler class="custom-icon" name="map-pin"></i-tabler> Llegar
+        </button>
+
+        <!-- Botón "WhatsApp" -->
+        <button class="custom-button whatsapp-button" (click)="openWhatsApp()">
+          <i-tabler class="custom-icon" name="brand-whatsapp"></i-tabler> WhatsApp
+        </button>
+
+      </div>
+       
+      <!-- Mapa de Google Maps -->
+      <div id="map" style="height: 400px; width: 100%;margin-top: 30px;"></div>
+
+    </mat-card-content>
+  </mat-card>
