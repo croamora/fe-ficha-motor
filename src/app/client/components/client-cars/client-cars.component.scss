@@ -1,0 +1,29 @@
+.header-with-button {
+    display: flex; /* Utiliza flexbox para organizar elementos */
+    align-items: center; /* Centra verticalmente el título y el botón */
+    justify-content: space-between; /* Distribuye el espacio entre los elementos */
+}
+
+.header-with-button button {
+    margin-left: auto; /* Empuja el botón hacia el extremo derecho */
+}
+
+
+::ng-deep .mdc-button__label {
+    display: flex; /* Asegura que el ícono y el texto se alineen correctamente */
+    align-items: flex-start; /* Alinea el contenido hacia la parte superior */
+    gap: 4px; /* Espacio entre el ícono y el texto */
+}
+  
+.button-text {
+    font-size: 14px; /* Ajusta el tamaño del texto */
+    position: relative;
+    font-weight: bold;
+    top: 1px; /* Mueve el texto ligeramente hacia arriba */
+}
+
+.card-header {
+    display: flex; /* Flexbox para organizar elementos */
+    justify-content: space-between; /* Título a la izquierda, botón al final */
+    align-items: center; /* Centra verticalmente */
+}

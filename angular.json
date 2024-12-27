@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Spike": {
+    "ficha-motor": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": ["apexcharts", "bezier-easing", "moment"],
-            "outputPath": "dist/Spike",
+            "outputPath": "dist/ficha-motor",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -63,10 +63,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "Spike:build:production"
+              "buildTarget": "ficha-motor:build:production"
             },
             "development": {
-              "buildTarget": "Spike:build:development"
+              "buildTarget": "ficha-motor:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +74,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "Spike:build"
+            "buildTarget": "ficha-motor:build"
           }
         },
         "test": {

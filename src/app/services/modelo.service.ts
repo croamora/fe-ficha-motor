@@ -6,16 +6,13 @@ import { PaginationModel } from '../models/pagination-model';
 
 
 @Injectable({ providedIn: 'root' })
-export class VehiculoService {
+export class ModeloService {
     
 
-    private readonly apiUrl = environment.apiEndpoint + 'vehiculo';
+    private readonly apiUrl = environment.apiEndpoint + 'modelo';
 
     constructor(private http:HttpClient) {}
 
-    checkVehicle(patente: string) : Observable<boolean>{
-        return this.http.get<boolean>(this.apiUrl + '/existe/' + patente, { withCredentials: true });
-    }
 
     getVehiculos(pageNum: number, pageSize: number, palabraClave: string) : Observable<PaginationModel>{
         let finalurl = this.apiUrl + '?pageNum='+pageNum+'&pageSize='+pageSize+'&palabraClave='+ palabraClave

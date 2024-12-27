@@ -1,0 +1,126 @@
+<mat-card class="cardWithShadow theme-card" style="margin-bottom: 10px;">
+    <mat-card-header >
+      <button 
+        mat-flat-button 
+        color="primary" 
+        (click)="volver()"
+      >
+        <i-tabler class="custom-icon" name="arrow-left"></i-tabler>
+        <span class="button-text">Volver</span>
+      </button>
+    </mat-card-header>
+  </mat-card>
+  
+  <mat-card class="cardWithShadow theme-card" style="margin-bottom: 10px;">
+    <mat-card-content>
+
+        <div *ngIf="!carExists" class="row align-items-center">
+
+            <div class="container">
+                <div class="license-plate">
+                  <div class="license-text">
+                    <!-- Parte izquierda de la patente -->
+                    <span>{{ patentePreview | slice: 0:2 }}</span>
+                    <!-- Separador central -->
+                    <span class="separator">•</span>
+                    <!-- Parte central de la patente -->
+                    <span>{{ patentePreview | slice: 2:4 }}</span>
+                    <!-- Separador final -->
+                    <span class="separator">•</span>
+                    <!-- Parte derecha de la patente -->
+                    <span>{{ patentePreview | slice: 4 }}</span>
+                  </div>
+                  <div class="license-country">CHILE</div>
+                </div>
+              </div>
+              
+        </div>
+
+
+
+
+      <form [formGroup]="carForm" (ngSubmit)="onSubmit()">
+
+        <div>
+            <div style="width: 80%;display: inline-block;">
+
+                <mat-form-field appearance="fill"  class="full-width">
+                    <mat-label>Patente</mat-label>
+                    <input
+                    matInput
+                    formControlName="patente"
+                    maxlength="6"
+                    (input)="onPatenteInput($event)"
+                    />
+                    
+                    <mat-error *ngIf="carForm.get('patente')?.invalid">
+                    Patente inválida. Solo se permiten 8 caracteres alfanuméricos.
+                    </mat-error>
+                </mat-form-field>
+                
+            </div>
+        
+            <div style="width: 20%;display: inline-block;">
+                <button mat-flat-button color="primary" style="    padding: 22px 20px;margin-left: 10px;" (click)="checkPatente()">
+                  <i-tabler class="custom-icon" name="search"></i-tabler>
+                </button>
+              </div>
+        </div>
+       
+          
+        
+  
+        <!-- Mostrar el resto del formulario solo si la patente no existe -->
+        <div *ngIf="!carExists">
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Marca</mat-label>
+                <input
+                  matInput
+                  [matAutocomplete]="autoMarca"
+                  formControlName="marca"
+                  [value]="selectedMarca ? selectedMarca.marca : ''"
+                  (input)="onMarcaInput($event)"
+                />
+                <mat-autocomplete #autoMarca="matAutocomplete" (optionSelected)="onMarcaChange($event.option.value)">
+                  <mat-option *ngFor="let marca of (marcasFiltradas | async)" [value]="marca">
+                    {{ marca.marca }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Modelo</mat-label>
+                <input
+                  matInput
+                  [matAutocomplete]="autoModelo"
+                  formControlName="modelo"
+                  [value]="selectedModelo ? selectedModelo.modelo : ''"
+                  (input)="onModeloInput($event)"
+                />
+                <mat-autocomplete #autoModelo="matAutocomplete" (optionSelected)="onModeloChange($event.option.value)" >
+                  <mat-option *ngFor="let modelo of (modelosFiltrados | async)" [value]="modelo">
+                    {{ modelo.modelo }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              
+          <!-- Campo de Año -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Año</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="anio"
+              min="1900"
+              [max]="currentYear"
+            />
+          </mat-form-field>
+  
+          <button mat-flat-button color="primary" type="submit" [disabled]="carForm.invalid">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  

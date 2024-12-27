@@ -15,7 +15,7 @@ export const navItems: NavItem[] = [
     displayName: 'Talleres',
     iconName: 'building-store',
     bgcolor: 'primary',
-    route: '/admin/talleres',
+    route: '/admin/stores',
   },
   
 

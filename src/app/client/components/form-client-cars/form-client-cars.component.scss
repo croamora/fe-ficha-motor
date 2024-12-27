@@ -1,0 +1,81 @@
+.header-with-button {
+    display: flex; /* Utiliza flexbox para organizar elementos */
+    align-items: center; /* Centra verticalmente el título y el botón */
+    justify-content: space-between; /* Distribuye el espacio entre los elementos */
+}
+
+.header-with-button button {
+    margin-left: auto; /* Empuja el botón hacia el extremo derecho */
+}
+
+
+::ng-deep .mdc-button__label {
+    display: flex; /* Asegura que el ícono y el texto se alineen correctamente */
+    align-items: flex-start; /* Alinea el contenido hacia la parte superior */
+    gap: 4px; /* Espacio entre el ícono y el texto */
+}
+  
+.button-text {
+    font-size: 14px; /* Ajusta el tamaño del texto */
+    position: relative;
+    font-weight: bold;
+    top: 1px; /* Mueve el texto ligeramente hacia arriba */
+}
+
+.card-header {
+    display: flex; /* Flexbox para organizar elementos */
+    justify-content: space-between; /* Título a la izquierda, botón al final */
+    align-items: center; /* Centra verticalmente */
+}
+
+.full-width {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+
+  .license-plate {
+    display: flex;
+    flex-direction: column; /* Alinea el texto y el país en columna */
+    justify-content: center; /* Centra verticalmente el contenido */
+    align-items: center; /* Centra horizontalmente el contenido */
+    width: 300px; /* Ancho del componente */
+    height: 100px; /* Alto del componente */
+    border: 2px solid black; /* Borde negro para simular la patente */
+    border-radius: 10px; /* Bordes redondeados */
+    background-color: white; /* Fondo blanco */
+    text-align: center; /* Centra el texto */
+  }
+  
+  .license-text {
+    margin-top: 20px;
+    font-size: 40px;
+    font-weight: bold; /* Texto en negrita */
+    display: flex; /* Alinea las partes de la patente horizontalmente */
+    justify-content: center; /* Centra las partes horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    gap: 5px; /* Espaciado entre los segmentos */
+  }
+  
+  .separator {
+    margin: 0 5px; /* Espacio alrededor de los puntos separadores */
+    font-size: 28px; /* Tamaño más grande para destacar los separadores */
+  }
+  
+  .license-country {
+    font-size: 16px; /* Tamaño más pequeño para "CHILE" */
+    margin-top: 10px; /* Espaciado superior */
+    font-weight: bold; /* En negrita */
+    letter-spacing: 2px; /* Espaciado entre letras */
+  }
+  
+
+  .container {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 100%; /* Asegúrate de que el contenedor ocupe el alto necesario */
+    padding-bottom: 20px; /* Opcional: añade padding para espacio adicional */
+  }
+  

@@ -2,15 +2,19 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminDashboardComponent } from './component/admin-dashboard/admin-dashboard.component';
 import { AdminComponent } from './admin.component';
 import { NgModule } from '@angular/core';
+import { AdminStoresComponent } from './component/admin-stores/admin-stores.component';
 
 export const adminRoutes: Routes = [
   {
     path: '',
-    component: AdminComponent,
     children: [
       {
         path: '',
         component: AdminDashboardComponent,
+      },
+      {
+        path: 'stores',
+        component: AdminStoresComponent,
       },
     ],
   },
