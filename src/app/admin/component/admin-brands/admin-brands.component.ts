@@ -12,15 +12,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { TallerService } from 'src/app/services/taller.service';
+import { MarcaService } from 'src/app/services/marca.service';
 
 @Component({
-  selector: 'app-admin-stores',
+  selector: 'app-admin-brands',
   standalone: true,
   imports: [
     CommonModule,
@@ -41,20 +41,20 @@ import { TallerService } from 'src/app/services/taller.service';
     MatIconModule,
     MatTableModule 
   ],
-  templateUrl: './admin-stores.component.html',
-  styleUrl: './admin-stores.component.scss'
+  templateUrl: './admin-brands.component.html',
+  styleUrl: './admin-brands.component.scss'
 })
-export class AdminStoresComponent implements OnInit {
+export class AdminBrandsComponent implements OnInit {
 
-  displayedColumns: string[] = ['nombre', 'direccion', 'telefono', 'acciones'];
-  talleres: MatTableDataSource<any>;
+  displayedColumns: string[] = ['marca', 'modelos', 'acciones'];
+  marcas: MatTableDataSource<any>;
   pageIndex: number;
   length: number;
   palabraClave: string = '';
 
   constructor(
     private router: Router,
-    private tallerService: TallerService,
+    private marcaService: MarcaService,
     private spinner: NgxSpinnerService,
     private snackBar: MatSnackBar
   ) {}
@@ -71,30 +71,34 @@ export class AdminStoresComponent implements OnInit {
     const pageNum = event?.pageIndex ? event.pageIndex + 1 : 1;
     const pageSize = event?.pageSize ? event.pageSize : 12;
     this.spinner.show();
-    this.tallerService.getTalleres(pageNum, pageSize, this.palabraClave).subscribe({
+    this.marcaService.getPaginMarcas(pageNum, pageSize, this.palabraClave).subscribe({
       next: (response) => {
         this.spinner.hide();
         this.pageIndex = response.pageNum - 1;
         this.length = response.total;
-        this.talleres = new MatTableDataSource(response.list);
+        this.marcas = new MatTableDataSource(response.list);
       },
       error: (err) => {
         this.spinner.hide();
-        console.error('Error al cargar los talleres:', err);
+        console.error('Error al cargar las Marcas:', err);
       },
     });
   }
 
-  agregarTaller(): void {
+  irAModelos(id: number): void {
+    this.router.navigate(['/admin/brands/models', id]);
+  }
+
+  agregarMarca(): void {
     
-    this.router.navigate(['/admin/stores/form']);
+    //this.router.navigate(['/admin/stores/form']);
   }
 
-  editarTaller(taller: any): void {
-    this.router.navigate(['/editar-taller', taller.id]);
+  editarMarca(taller: any): void {
+    //this.router.navigate(['/editar-taller', taller.id]);
   }
 
-  eliminarTaller(id: number): void {
+  eliminarMarca(id: number): void {
   //   if (confirm('¿Estás seguro de que deseas eliminar este taller?')) {
   //     this.spinner.show();
   //     this.tallerService.deleteTaller(id).subscribe({

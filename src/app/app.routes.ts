@@ -19,13 +19,6 @@ export const routes: Routes = [
           import('./pages/pages.routes').then((m) => m.PagesRoutes),
       },
       {
-        path: 'cliente',
-        loadChildren: () =>
-          import('./components/cliente/cliente.routes').then(
-            (m) => m.ClienteRoutes
-          ),
-      },
-      {
         path: 'admin',
         canActivate: [ProfileGuard],
         loadChildren: () =>

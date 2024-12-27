@@ -16,7 +16,7 @@ export class ProfileGuard implements CanActivate {
     const currentUrl = this.router.url; // Obtener la URL actual
 
     // Si el perfil ya está determinado (es decir, el login se ha completado)
-    if (userProfile !== 0) {
+    if (this.authService.isAuthenticated() && userProfile !== 0) {
       if (currentUrl.includes('/admin') && userProfile === 1) {
         return true; // Ya en la ruta de admin, permite continuar
       } else if (currentUrl.includes('/client') && userProfile === 2) {
@@ -28,11 +28,13 @@ export class ProfileGuard implements CanActivate {
         //this.redirectBasedOnProfile(userProfile);
         return true;
       }
+    } else {
+        // Si no hay perfil, redirigir al login o a una ruta por defecto
+        this.router.navigate(['/descubrir']);
+        return false;
     }
 
-    // Si no hay perfil, redirigir al login o a una ruta por defecto
-    this.router.navigate(['/descubrir']);
-    return false;
+    
   }
 
   private getUserProfile(): number {

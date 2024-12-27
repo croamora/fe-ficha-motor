@@ -17,6 +17,11 @@ export const navItems: NavItem[] = [
     bgcolor: 'primary',
     route: '/admin/stores',
   },
-  
+  {
+    displayName: 'Marcas',
+    iconName: 'brand-toyota',
+    bgcolor: 'primary',
+    route: '/admin/brands',
+  },
 
 ];

@@ -76,7 +76,7 @@ export class AuthService {
 
   getProfileFromToken(): number | null {
     const token = localStorage.getItem(this.TOKEN_KEY); // Asegúrate de que el token esté almacenado
-    if (!token) {
+    if (!token || !this.isAuthenticated()) {
       return null;
     }
 

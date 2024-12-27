@@ -51,7 +51,7 @@ export class AppNavItemComponent implements OnChanges {
   @Input() item: NavItem | any;
   @Input() depth: any;
 
-  private userProfileId: number | null = null; // Perfil del usuario logueado
+  private userProfileId: number | null = null; 
 
   constructor(
     public navService: NavService, 
@@ -62,7 +62,6 @@ export class AppNavItemComponent implements OnChanges {
       this.depth = 0;
     }
 
-    // Obtener el perfil del usuario desde el token al inicializar el componente
     this.userProfileId = this.authService.getProfileFromToken();
   }
 

@@ -47,7 +47,7 @@ const BELOWMONITOR = 'screen and (max-width: 1023px)';
 
 export class FullComponent implements OnInit {
 
-  navItems: NavItem[] = [];// Variable para almacenar los navItems
+  navItems: NavItem[] = [];
 
   @ViewChild('leftsidenav')
   public sidenav: MatSidenav | any;

@@ -18,8 +18,20 @@ export class MarcaService {
         return this.http.get<any[]>(this.apiUrl, { withCredentials: true });
     }
 
+    getPaginMarcas(pageNum: number, pageSize: number, palabraClave: string) : Observable<PaginationModel>{
+        let finalurl = this.apiUrl + "/page" + '?pageNum='+pageNum+'&pageSize='+pageSize+'&palabraClave='+ palabraClave
+        return this.http.get<PaginationModel>(finalurl, { withCredentials: true });
+    }
+
     getModelosByMarca(idMarca: string) : Observable<any[]>{
         return this.http.get<any[]>(this.apiUrl + '/' + idMarca + '/modelos', { withCredentials: true });
     }
+
+    getPaginModelosByMarcas(idModelo: string, pageNum: number, pageSize: number, palabraClave: string) : Observable<PaginationModel>{
+        let finalurl = this.apiUrl + "/" + idModelo + "/modelos/page" + '?pageNum='+pageNum+'&pageSize='+pageSize+'&palabraClave='+ palabraClave
+        return this.http.get<PaginationModel>(finalurl, { withCredentials: true });
+    }
+
+    
 
 }
