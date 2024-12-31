@@ -49,3 +49,16 @@
   display: flex;
   justify-content: flex-end; /* Alinea los botones dentro de la celda */
 }
+
+
+.header-container {
+  display: flex;
+  align-items: center; /* Alinea el botón y el texto verticalmente */
+  gap: 15px; /* Espacio entre el botón y el texto */
+}
+
+.header-text {
+  font-size: 16px; /* Tamaño de texto */
+  font-weight: 500; /* Ajusta el grosor si es necesario */
+  color: var(--primary-text-color); /* Usa un color adecuado */
+}

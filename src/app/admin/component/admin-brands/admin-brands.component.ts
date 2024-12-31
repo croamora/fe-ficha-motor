@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -18,6 +18,9 @@ import { Router } from '@angular/router';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { MarcaService } from 'src/app/services/marca.service';
+import { AgregarMarcaComponent } from './modals/agregar-marca/agregar-marca.component';
+import Swal from 'sweetalert2';
+import { Marca } from 'src/app/models/marca-model';
 
 @Component({
   selector: 'app-admin-brands',
@@ -39,7 +42,8 @@ import { MarcaService } from 'src/app/services/marca.service';
     NgxSpinnerModule,
     MatPaginator,
     MatIconModule,
-    MatTableModule 
+    MatTableModule,
+    MatDialogModule
   ],
   templateUrl: './admin-brands.component.html',
   styleUrl: './admin-brands.component.scss'
@@ -56,7 +60,8 @@ export class AdminBrandsComponent implements OnInit {
     private router: Router,
     private marcaService: MarcaService,
     private spinner: NgxSpinnerService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -90,29 +95,80 @@ export class AdminBrandsComponent implements OnInit {
   }
 
   agregarMarca(): void {
-    
-    //this.router.navigate(['/admin/stores/form']);
+    const dialogRef = this.dialog.open(AgregarMarcaComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.spinner.show();
+        this.marcaService.createMarca(result).subscribe({
+          next: (data) => {
+            this.spinner.hide();
+            this.callData();
+            this.snackBar.open(data.msg, 'Cerrar', { duration: 3000 });
+          },
+          error: (err) => {
+            this.spinner.hide();
+            console.error('Error al crear la marca:', err);
+            this.snackBar.open('Hubo un error al crear la marca.', 'Cerrar', { duration: 3000 });
+          },
+        });
+      }
+    });
   }
 
-  editarMarca(taller: any): void {
-    //this.router.navigate(['/editar-taller', taller.id]);
+  editarMarca(marca: any): void {
+    const dialogRef = this.dialog.open(AgregarMarcaComponent, {
+      width: '400px',
+      data: { marca }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.spinner.show();
+        this.marcaService.updateMarca(result).subscribe({
+          next: (data) => {
+            this.spinner.hide();
+            this.callData();
+            this.snackBar.open(data.msg, 'Cerrar', { duration: 3000 });
+          },
+          error: (err) => {
+            this.spinner.hide();
+            console.error('Error al actualizar la marca:', err);
+            this.snackBar.open('Hubo un error al actualizar la marca.', 'Cerrar', { duration: 3000 });
+          },
+        });
+      }
+    });
   }
 
   eliminarMarca(id: number): void {
-  //   if (confirm('¿Estás seguro de que deseas eliminar este taller?')) {
-  //     this.spinner.show();
-  //     this.tallerService.deleteTaller(id).subscribe({
-  //       next: () => {
-  //         this.spinner.hide();
-  //         this.callData();
-  //         this.snackBar.open('Taller eliminado con éxito.', 'Cerrar', { duration: 3000 });
-  //       },
-  //       error: (err) => {
-  //         this.spinner.hide();
-  //         console.error('Error al eliminar el taller:', err);
-  //         this.snackBar.open('Hubo un error al eliminar el taller.', 'Cerrar', { duration: 3000 });
-  //       },
-  //     });
-  //   }
+    Swal.fire({
+      title: "Está seguro?",
+      text: "Al borrar se eliminarán todos los modelos asociados!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, Borrar!",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.spinner.show();
+        this.marcaService.deleteMarca(id).subscribe({
+          next: (data) => {
+            this.spinner.hide();
+            this.callData();
+            this.snackBar.open(data.msg, 'Cerrar', { duration: 3000 });
+          },
+          error: (err) => {
+            this.spinner.hide();
+            console.error('Error al eliminar la marca:', err);
+            this.snackBar.open('Hubo un error al eliminar la marca.', 'Cerrar', { duration: 3000 });
+          },
+        });
+      }
+    });
   }
 }

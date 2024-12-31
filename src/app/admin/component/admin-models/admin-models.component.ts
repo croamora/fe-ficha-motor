@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -17,7 +17,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { Marca } from 'src/app/models/marca-model';
 import { MarcaService } from 'src/app/services/marca.service';
+import { AgregarModeloComponent } from './modals/agregar-modelo/agregar-modelo.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-models',
@@ -39,7 +42,8 @@ import { MarcaService } from 'src/app/services/marca.service';
     NgxSpinnerModule,
     MatPaginator,
     MatIconModule,
-    MatTableModule 
+    MatTableModule,
+    MatDialogModule
   ],
   templateUrl: './admin-models.component.html',
   styleUrl: './admin-models.component.scss'
@@ -51,22 +55,38 @@ export class AdminModelsComponent implements OnInit {
   pageIndex: number;
   length: number;
   palabraClave: string = '';
-  modeloId: string = '';
+  marcaId: string = '';
+  marca: Marca;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private marcaService: MarcaService,
     private spinner: NgxSpinnerService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      this.modeloId = params.get('id') || '';
-      if (this.modeloId) {
+      this.marcaId = params.get('id') || '';
+      if (this.marcaId) {
+        this.getMarca();
         this.callData();
       }
+    });
+  }
+
+  public getMarca(): void {
+    this.marcaService.getMarca(this.marcaId).subscribe({
+      next: (response) => {
+        this.spinner.hide();
+        this.marca = response;
+      },
+      error: (err) => {
+        this.spinner.hide();
+        console.error('Error al cargar la Marcas:', err);
+      },
     });
   }
 
@@ -78,7 +98,7 @@ export class AdminModelsComponent implements OnInit {
     const pageNum = event?.pageIndex ? event.pageIndex + 1 : 1;
     const pageSize = event?.pageSize ? event.pageSize : 12;
     this.spinner.show();
-    this.marcaService.getPaginModelosByMarcas(this.modeloId, pageNum, pageSize, this.palabraClave).subscribe({
+    this.marcaService.getPaginModelosByMarcas(this.marcaId, pageNum, pageSize, this.palabraClave).subscribe({
       next: (response) => {
         this.spinner.hide();
         this.pageIndex = response.pageNum - 1;
@@ -87,37 +107,89 @@ export class AdminModelsComponent implements OnInit {
       },
       error: (err) => {
         this.spinner.hide();
-        console.error('Error al cargar las Marcas:', err);
+        console.error('Error al cargar los Modelos:', err);
       },
     });
   }
 
 
   agregarModelo(): void {
-    
-    //this.router.navigate(['/admin/stores/form']);
+    const dialogRef = this.dialog.open(AgregarModeloComponent, {
+      width: '400px',
+      data: { idMarca: this.marca.id }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.spinner.show();
+        this.marcaService.createModelo(result).subscribe({
+          next: (data) => {
+            this.spinner.hide();
+            this.callData();
+            this.snackBar.open(data.msg, 'Cerrar', { duration: 3000 });
+          },
+          error: (err) => {
+            this.spinner.hide();
+            console.error('Error al crear el modelo:', err);
+            this.snackBar.open('Hubo un error al crear el modelo.', 'Cerrar', { duration: 3000 });
+          },
+        });
+      }
+    });
   }
 
   editarModelo(modelo: any): void {
-    //this.router.navigate(['/editar-taller', taller.id]);
+    const dialogRef = this.dialog.open(AgregarModeloComponent, {
+      width: '400px',
+      data: { modelo, idMarca: this.marca.id }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.spinner.show();
+        this.marcaService.updateModelo(result).subscribe({
+          next: (data) => {
+            this.spinner.hide();
+            this.callData();
+            this.snackBar.open(data.msg, 'Cerrar', { duration: 3000 });
+          },
+          error: (err) => {
+            this.spinner.hide();
+            console.error('Error al actualizar el modelo:', err);
+            this.snackBar.open('Hubo un error al actualizar el modelo.', 'Cerrar', { duration: 3000 });
+          },
+        });
+      }
+    });
   }
 
   eliminarModelo(id: number): void {
-  //   if (confirm('¿Estás seguro de que deseas eliminar este taller?')) {
-  //     this.spinner.show();
-  //     this.tallerService.deleteTaller(id).subscribe({
-  //       next: () => {
-  //         this.spinner.hide();
-  //         this.callData();
-  //         this.snackBar.open('Taller eliminado con éxito.', 'Cerrar', { duration: 3000 });
-  //       },
-  //       error: (err) => {
-  //         this.spinner.hide();
-  //         console.error('Error al eliminar el taller:', err);
-  //         this.snackBar.open('Hubo un error al eliminar el taller.', 'Cerrar', { duration: 3000 });
-  //       },
-  //     });
-  //   }
+    Swal.fire({
+      title: "Está seguro?",
+      text: "El modelo quedará aliminado para siempre!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, Borrar!",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.spinner.show();
+        this.marcaService.deleteModelo(this.marca.id, id).subscribe({
+          next: (data) => {
+            this.spinner.hide();
+            this.callData();
+            this.snackBar.open(data.msg, 'Cerrar', { duration: 3000 });
+          },
+          error: (err) => {
+            this.spinner.hide();
+            console.error('Error al eliminar el modelo:', err);
+            this.snackBar.open('Hubo un error al eliminar el modelo.', 'Cerrar', { duration: 3000 });
+          },
+        });
+      }
+    });
   }
 
 

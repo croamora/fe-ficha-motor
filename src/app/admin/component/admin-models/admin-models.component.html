@@ -1,15 +1,22 @@
 <mat-card class="cardWithShadow theme-card" style="margin-bottom: 10px;">
-    <mat-card-header >
-      <button 
-        mat-flat-button 
-        color="primary" 
-        (click)="volver()"
-      >
-        <i-tabler class="custom-icon" name="arrow-left"></i-tabler>
-        <span class="button-text">Volver</span>
-      </button>
+    <mat-card-header>
+      <div class="header-container">
+        <!-- Botón de Volver -->
+        <button 
+          mat-flat-button 
+          color="primary" 
+          (click)="volver()"
+        >
+          <i-tabler class="custom-icon" name="arrow-left"></i-tabler>
+          <span class="button-text">Volver</span>
+        </button>
+  
+        <!-- Texto al lado del botón -->
+        <span class="header-text">Modelos de {{ marca.marca }}</span>
+      </div>
     </mat-card-header>
   </mat-card>
+  
 
 
 
