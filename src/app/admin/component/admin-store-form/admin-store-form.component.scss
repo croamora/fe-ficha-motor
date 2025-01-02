@@ -21,3 +21,173 @@
     font-weight: bold;
     top: 1px; /* Mueve el texto ligeramente hacia arriba */
 }
+
+.categorias-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .categorias-column {
+    width: 45%;
+  }
+  
+  .drop-list {
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    min-height: 200px;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  .drag-item {
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: move;
+  }
+  
+
+  .stepper-buttons {
+    display: flex;
+    justify-content: flex-end; /* Alinea los botones a la derecha */
+    padding-top: 10px; /* Ajusta el espaciado si es necesario */
+  }
+  
+  .stepper-buttons button {
+    /* Estilos adicionales si los necesitas */
+  }
+
+  .drop-list {
+    border: 2px dashed #ccc;
+    min-height: 200px;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  .drag-item {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    cursor: grab;
+  }
+
+  .image-preview {
+    max-width: 100%;
+    max-height: 200px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  /* Contenedor del banner */
+.banner-container {
+  position: relative;
+  width: 100%;
+  height: 200px; /* Ajusta la altura del banner */
+  overflow: hidden;
+  background-color: #f0f0f0; /* Color de fondo para mostrar mientras carga */
+}
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Asegura que la imagen cubra todo el espacio */
+}
+
+/* Contenedor de la imagen de perfil */
+.profile-container {
+  position: absolute;
+  bottom: -40px; /* Mueve la imagen hacia abajo, superpuesta sobre el banner */
+  left: 50%;
+  transform: translateX(-50%); /* Centra horizontalmente */
+  border: 4px solid white; /* Borde blanco alrededor de la imagen */
+  border-radius: 50%; /* Hace la imagen circular */
+  width: 80px; /* Tamaño de la imagen de perfil */
+  height: 80px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Asegura que la imagen de perfil se ajuste bien */
+  border-radius: 50%; /* Asegura que siga siendo circular */
+}
+
+/* Ajustes adicionales para el mat-card */
+.card-header {
+  position: relative;
+  padding: 0;
+}
+
+.mat-card-content {
+  padding-top: 50px; /* Agrega espacio para compensar la superposición de la imagen de perfil */
+  text-align: center;
+}
+
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.custom-upload-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.custom-upload-input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-upload-input:hover {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.custom-upload-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.75);
+}
+
+.image-preview-container {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+.mat-column-select {
+  width: 50px;  /* Ajusta el valor según el tamaño del radio button */
+  text-align: center;
+}
+
+.radio-button {
+  padding: 0;  /* Elimina el padding extra alrededor del radio button */
+}

@@ -139,7 +139,6 @@ export class FormClientCarsComponent implements OnInit {
     //this.marcasFiltradas = this.filterMarcas(value);
     const input = event.target as HTMLInputElement | null;
     if (input) {
-      console.log(input)
       this.marcasFiltradas = this.filterMarcas(input.value);
     }
   }

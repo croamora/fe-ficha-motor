@@ -86,7 +86,6 @@ export class AdminStoresComponent implements OnInit {
   }
 
   agregarTaller(): void {
-    
     this.router.navigate(['/admin/stores/form']);
   }
 

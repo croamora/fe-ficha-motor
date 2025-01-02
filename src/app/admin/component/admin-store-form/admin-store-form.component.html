@@ -1,12 +1,234 @@
 <mat-card class="cardWithShadow theme-card" style="margin-bottom: 10px;">
-    <mat-card-header >
-      <button 
-        mat-flat-button 
-        color="primary" 
-        (click)="volver()"
-      >
+    <mat-card-header>
+      <button mat-flat-button color="primary" (click)="volver()">
         <i-tabler class="custom-icon" name="arrow-left"></i-tabler>
         <span class="button-text">Volver</span>
       </button>
     </mat-card-header>
   </mat-card>
+  
+  <mat-card class="cardWithShadow theme-card overflow-hidden">
+
+    <mat-card-header class="card-header" style="padding: 0px;">
+      <!-- Imagen del banner -->
+      <div *ngIf="imagenPrincipal" class="banner-container">
+        <img [src]="imagenPrincipal" alt="Banner Image" class="banner-img" />
+      </div>
+      <!-- Imagen de perfil -->
+      <div *ngIf="imagenPerfil" class="profile-container">
+        <img [src]="imagenPerfil" alt="Profile Image" class="profile-img" />
+      </div>
+    </mat-card-header>
+
+    <mat-card-content class="b-t-1">
+      <mat-horizontal-stepper [linear]="true" #stepper>
+  
+        <!-- Paso 1: Información del Taller -->
+        <mat-step [stepControl]="tallerForm">
+          <form [formGroup]="tallerForm">
+            <ng-template matStepLabel>Información</ng-template>
+  
+            <div fxLayout="column" fxLayoutGap="10px" style="margin-top: 10px;">
+              <mat-form-field appearance="outline" class="w-100" color="primary">
+                <mat-label>Nombre Taller</mat-label>
+                <input matInput formControlName="nombre" />
+                <mat-hint *ngIf="tallerForm.controls['nombre'].touched && tallerForm.controls['nombre'].invalid">
+                  <span *ngIf="tallerForm.controls['nombre'].hasError('required')" class="text-error">
+                    El nombre es obligatorio.
+                  </span>
+                </mat-hint>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline" class="w-100" color="primary">
+                <mat-label>Dirección</mat-label>
+                <input matInput formControlName="direccion" />
+                <mat-hint *ngIf="tallerForm.controls['direccion'].touched && tallerForm.controls['direccion'].invalid">
+                  <span *ngIf="tallerForm.controls['direccion'].hasError('required')" class="text-error">
+                    La dirección es obligatoria.
+                  </span>
+                </mat-hint>
+              </mat-form-field>
+  
+              <!-- Teléfono -->
+              <mat-form-field appearance="outline" class="w-100" color="primary">
+                <mat-label>Teléfono</mat-label>
+                <span matPrefix>+569&nbsp;</span>
+                <input matInput formControlName="telefono" maxlength="8" />
+                <mat-hint *ngIf="tallerForm.controls['telefono'].touched && tallerForm.controls['telefono'].invalid">
+                  <span *ngIf="tallerForm.controls['telefono'].hasError('required')" class="text-error">
+                    El teléfono es obligatorio.
+                  </span>
+                  <span *ngIf="tallerForm.controls['telefono'].hasError('pattern')" class="text-error">
+                    El teléfono debe contener exactamente 8 dígitos.
+                  </span>
+                </mat-hint>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="w-100" color="primary">
+                <mat-label>Región</mat-label>
+                <mat-select formControlName="idRegion" (selectionChange)="onRegionChange()">
+                  <mat-option *ngFor="let region of regiones" [value]="region.id">
+                    {{ region.region }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+        
+              <mat-form-field appearance="outline" class="w-100" color="primary">
+                <mat-label>Comuna</mat-label>
+                <mat-select formControlName="idComuna">
+                  <mat-option *ngFor="let comuna of comunasFiltradas" [value]="comuna.id">
+                    {{ comuna.comuna }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline" class="w-100" color="primary">
+                <mat-label>Descripción</mat-label>
+                <textarea matInput formControlName="descripcion"></textarea>
+              </mat-form-field>
+
+              <div class="upload-container">
+                <label for="imgUpload" class="custom-upload-label">Imagen Principal:</label>
+                <input
+                  id="imgUpload"
+                  type="file"
+                  (change)="onFileChange($event, 'img')"
+                  accept="image/*"
+                  class="custom-upload-input"
+                />
+              </div>
+              
+
+              <div class="upload-container">
+                <label for="imgProfileUpload" class="custom-upload-label">Imagen de Perfil:</label>
+                <input
+                  id="imgProfileUpload"
+                  type="file"
+                  (change)="onFileChange($event, 'imgProfile')"
+                  accept="image/*"
+                  class="custom-upload-input"
+                />
+              </div>
+              
+
+
+            </div>
+  
+            <div fxLayout="row" fxLayoutAlign="end center" class="stepper-buttons" style="margin-top: 10px;">
+              <button mat-raised-button color="primary" matStepperNext [disabled]="tallerForm.invalid">
+                Siguiente
+              </button>
+            </div>
+          </form>
+        </mat-step>
+  
+        <!-- Paso 2: Selección de Categorías -->
+        <mat-step>
+          <ng-template matStepLabel>Seleccionar Categorías</ng-template>
+  
+          <div class="categorias-container" style="margin-top: 20px;">
+            <div class="categorias-column">
+              <div
+                cdkDropList
+                id="categoriasDisponibles"
+                [cdkDropListData]="categoriasDisponibles"
+                [cdkDropListConnectedTo]="['categoriasSeleccionadas']"
+                class="drop-list"
+                (cdkDropListDropped)="drop($event)"
+              >
+                <div *ngFor="let categoria of categoriasDisponibles" cdkDrag class="drag-item">
+                  {{ categoria.categoria }}
+                </div>
+              </div>
+            </div>
+         
+            
+            <div class="categorias-column">
+              <div
+                cdkDropList
+                id="categoriasSeleccionadas"
+                [cdkDropListData]="categoriasSeleccionadas"
+                [cdkDropListConnectedTo]="['categoriasDisponibles']"
+                class="drop-list"
+                (cdkDropListDropped)="drop($event)"
+              >
+                <div *ngFor="let categoria of categoriasSeleccionadas" cdkDrag class="drag-item">
+                  {{ categoria.categoria }}
+                </div>
+              </div>
+            </div>
+
+            </div>
+          
+          
+  
+          <div fxLayout="row" fxLayoutAlign="end center" class="stepper-buttons" style="margin-top: 10px;">
+            <button mat-raised-button color="warn" matStepperPrevious>Anterior</button>
+            <button mat-raised-button color="primary" matStepperNext>
+              Siguiente
+            </button>
+          </div>
+          
+        </mat-step>
+  
+        
+        <!-- Paso 3: Asignar Usuario -->
+        <mat-step [stepControl]="usuarioForm">
+          <form [formGroup]="usuarioForm">
+            <ng-template matStepLabel>Asignar Usuario</ng-template>
+        
+            <mat-table [dataSource]="usuarios" style="margin-top: 20px;">
+              
+              <!-- Columna de Selección -->
+              <ng-container matColumnDef="select">
+                <mat-header-cell *matHeaderCellDef> Select </mat-header-cell>
+                <mat-cell *matCellDef="let usuario">
+                  <!-- Usamos formControlName en lugar de ngModel -->
+                  <mat-radio-group [formControlName]="'selectedUsuario'">
+                    <mat-radio-button [value]="usuario.id" class="radio-button">{{ usuario.nombre }}</mat-radio-button>
+                  </mat-radio-group>
+                </mat-cell>
+              </ng-container>
+        
+              <!-- Columna de Usuario -->
+              <ng-container matColumnDef="usuario">
+                <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+                <mat-cell *matCellDef="let usuario" (click)="selectUsuario(usuario.id)">
+                  {{ usuario.name }}
+                </mat-cell>
+              </ng-container>
+        
+              <!-- Columna de Email -->
+              <ng-container matColumnDef="email">
+                <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+                <mat-cell *matCellDef="let usuario"> {{ usuario.email }} </mat-cell>
+              </ng-container>
+
+               <!-- Columna de Telefono -->
+               <ng-container matColumnDef="telefono">
+                <mat-header-cell *matHeaderCellDef> Teléfono </mat-header-cell>
+                <mat-cell *matCellDef="let usuario"> {{ usuario.telefono }} </mat-cell>
+              </ng-container>
+        
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectUsuario(row.id)"></mat-row>
+            </mat-table>
+        
+            <div fxLayout="row" fxLayoutAlign="end center" class="stepper-buttons" style="margin-top: 10px;">
+              <button mat-raised-button color="warn" matStepperPrevious>Anterior</button>
+              <button mat-raised-button color="primary" (click)="guardar(stepper)">
+                {{ isEditMode ? 'Guardar Cambios' : 'Crear Taller' }}
+              </button>
+            </div>
+          </form>
+        </mat-step>
+        
+        
+        
+
+
+
+      </mat-horizontal-stepper>
+    </mat-card-content>
+  </mat-card>
+  
