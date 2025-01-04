@@ -9,6 +9,7 @@ import { PaginationModel } from '../models/pagination-model';
 export class UserService {
     
     
+    
     private readonly apiUrl = environment.apiEndpoint + 'usuario';
 
     constructor(private http:HttpClient) {}
@@ -19,4 +20,8 @@ export class UserService {
         return this.http.get<PaginationModel>(finalurl, { withCredentials: true });
     }
 
+    getUsuariosClientes(pageNum: number, pageSize: number, palabraClave: string) {
+        let finalurl = this.apiUrl + '/clients?pageNum='+pageNum+'&pageSize='+pageSize+'&palabraClave='+ palabraClave
+        return this.http.get<PaginationModel>(finalurl, { withCredentials: true });
+    }
 }
