@@ -1,11 +1,11 @@
 import { RouterModule, Routes } from '@angular/router';
 import { AdminDashboardComponent } from './component/admin-dashboard/admin-dashboard.component';
-import { AdminComponent } from './admin.component';
 import { NgModule } from '@angular/core';
 import { AdminStoresComponent } from './component/admin-stores/admin-stores.component';
 import { AdminBrandsComponent } from './component/admin-brands/admin-brands.component';
 import { AdminModelsComponent } from './component/admin-models/admin-models.component';
 import { AdminStoreFormComponent } from './component/admin-store-form/admin-store-form.component';
+import { AdminUsersComponent } from './component/admin-users/admin-users.component';
 
 export const adminRoutes: Routes = [
   {
@@ -24,12 +24,20 @@ export const adminRoutes: Routes = [
         component: AdminStoreFormComponent,
       },
       {
+        path: 'stores/form/:id',
+        component: AdminStoreFormComponent,
+      },
+      {
         path: 'brands',
         component: AdminBrandsComponent,
       },
       {
         path: 'brands/models/:id',
         component: AdminModelsComponent,
+      },
+      {
+        path: 'users',
+        component: AdminUsersComponent,
       },
     ],
   },

@@ -191,3 +191,21 @@
 .radio-button {
   padding: 0;  /* Elimina el padding extra alrededor del radio button */
 }
+
+
+.container {
+  padding: 16px;
+  width: 100%;
+  
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.search-imput {
+  width: 50%;
+}

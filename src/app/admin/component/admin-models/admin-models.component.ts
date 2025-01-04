@@ -166,7 +166,7 @@ export class AdminModelsComponent implements OnInit {
   eliminarModelo(id: number): void {
     Swal.fire({
       title: "Está seguro?",
-      text: "El modelo quedará aliminado para siempre!",
+      text: "El modelo quedará eliminado para siempre!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",

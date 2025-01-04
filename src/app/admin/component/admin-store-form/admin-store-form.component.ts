@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Categoria } from 'src/app/models/categoria-model';
@@ -11,16 +11,20 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { TablerIconsModule } from 'angular-tabler-icons';
-import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { CommonModule } from '@angular/common';
-import { TextFieldModule } from '@angular/cdk/text-field';
 import { RegionService } from 'src/app/services/region.service';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { MatRadioModule } from '@angular/material/radio';
+import { TallerService } from 'src/app/services/taller.service';
+import { UserService } from 'src/app/services/user.service';
+import { ClientUser } from 'src/app/models/clientUser-model';
+import { UserModel } from 'src/app/models/user-model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-admin-store-form',
@@ -57,27 +61,36 @@ export class AdminStoreFormComponent implements OnInit {
   regiones: any[] = [];
   comunas: any[] = [];
   comunasFiltradas: any[] = [];
-  usuarios: any[] = [];
-  selectedUsuario: string | null = null;
   isEditMode = false;
 
-  displayedColumns: string[] = ['select', 'usuario', 'email', 'telefono'];
+  displayedColumns: string[] = ['select', 'name', 'usuario', 'email', 'telefono'];
 
   imagenPrincipal: string | ArrayBuffer | null = null;
   imagenPerfil: string | ArrayBuffer | null = null;
+  tallerOriginal: any;
+
+  usuarios: MatTableDataSource<UserModel>;
+  palabraClave: string = '';
+  pageIndex: number;
+  length: number;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
+    private spinner: NgxSpinnerService,
+    private snackBar: MatSnackBar,
     private regionService: RegionService,
     private categoriaService: CategoriaService,
+    private tallerService: TallerService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
+
     // Verificar si se está editando
     const tallerId = this.route.snapshot.paramMap.get('id') || '';
-    this.loadData();
+    
     this.isEditMode = !!tallerId;
 
     // Inicializar formularios
@@ -96,53 +109,105 @@ export class AdminStoreFormComponent implements OnInit {
     });
 
     this.usuarioForm = this.fb.group({
-      selectedUsuario: ['', Validators.required], // Control de usuario seleccionado
+      selectedUsuarios: this.fb.array([]),
     });
+
+    this.loadData();
 
     // Si es edición, cargar datos del taller
     if (this.isEditMode) {
       this.cargarTaller(tallerId);
-    }
+      this.tallerForm.get('img')?.clearValidators();
+      this.tallerForm.get('imgProfile')?.clearValidators();
+      this.tallerForm.updateValueAndValidity();
+    } 
   }
 
   cargarTaller(id: string): void {
-    // Aquí iría la lógica para obtener los datos del taller por ID y rellenar los formularios
-    console.log('Cargar datos del taller con ID:', id);
+    // Aquí llamarías al servicio que obtiene los datos del taller por ID.
+    this.tallerService.getTallerToEditById(id).subscribe({
+      next: (tallerData: any) => {
+        // Cargar datos principales del taller
+        this.tallerOriginal = tallerData.taller;
+        this.tallerForm.patchValue({
+          nombre: tallerData.taller.nombre,
+          direccion: tallerData.taller.direccion,
+          telefono: tallerData.taller.telefono,
+          img: null, // No puedes asignar archivos directamente, manejarás esto con la vista.
+          imgProfile: null,
+          descripcion: tallerData.taller.descripcion,
+          idRegion: tallerData.taller.region.id,
+          idComuna: tallerData.taller.comuna.id,
+        });
+  
+        // Cargar imágenes (previsualización opcional)
+        this.imagenPrincipal = tallerData.taller.img;
+        this.imagenPerfil = tallerData.taller.imgProfile;
+  
+        // Filtrar comunas al cargar
+        this.onRegionChange();
+  
+        // Si tiene categorías seleccionadas
+        if (tallerData.categorias) {
+          this.categoriasSeleccionadas = tallerData.categorias;
+          this.categoriasDisponibles = this.categoriasDisponibles.filter(
+            (cat) => !tallerData.categorias.some((sel: Categoria) => sel.id === cat.id)
+          );
+        }
+  
+        // // Si tiene usuarios asignados
+        if (tallerData.usuarios) {
+          const usuariosArray = this.usuarioForm.get('selectedUsuarios') as FormArray;
+          // Limpiar el array si estás cargando los usuarios en una edición
+          usuariosArray.clear();
+
+          // Agregar los usuarios al FormArray
+          tallerData.usuarios.forEach((usuario) => {
+            usuariosArray.push(this.fb.group(usuario));  // Aquí, 'usuario' contiene los datos del usuario
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar los datos del taller:', err);
+      },
+    });
   }
 
   loadData(): void {
-    this.regionService.getRegiones().subscribe(
-      (regionesResult) => {
+    this.regionService.getRegiones().subscribe({
+      next: (regionesResult) => {
         this.regiones = regionesResult;
       },
-      (error) => console.error(error)
-    );
+      error: (err) => { 
+        console.error(err)
+      }
+    });
 
-    this.categoriaService.getCategorias().subscribe(
-      (categoriaResult) => {
+    this.categoriaService.getCategorias().subscribe({
+      next: (categoriaResult) => {
         this.categoriasDisponibles = categoriaResult;
       },
-      (error) => console.error(error)
-    );
+      error: (err) => {
+        console.error(err)
+      }
+    });
 
-    this.usuarios = [
-      { id: 1, name: 'Juan Pérez', email: 'juan.perez@example.com', telefono: 56912345678 },
-      { id: 2, name: 'Ana Gómez', email: 'ana.gomez@example.com', telefono: 56912345678 },
-      { id: 3, name: 'Carlos Ruiz', email: 'carlos.ruiz@example.com', telefono: 56912345678 }
-    ];
+
+    this.callData();
     
   }
 
   onRegionChange(): void {
     const regionId = this.tallerForm.get('idRegion')?.value;
-    this.regionService.getComunasByRegion(regionId).subscribe(
-      (comunasResult) => {
+    this.regionService.getComunasByRegion(regionId).subscribe({
+      next: (comunasResult) => { 
         this.comunasFiltradas = comunasResult;
       },
-      (error) => {
+      error: (err) => {
         this.comunas = [];
-        console.error(error)
-      });
+        console.error(err)
+      }
+    });
   }
 
   onFileChange(event: Event, controlName: string): void {
@@ -151,32 +216,35 @@ export class AdminStoreFormComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
   
-      // Validar que el archivo sea una imagen
       if (!file.type.startsWith('image/')) {
         alert('Por favor, selecciona un archivo de imagen válido.');
         input.value = ''; // Limpiar el campo de archivo
         return;
       }
   
-      // Previsualización de la imagen (opcional)
       const reader = new FileReader();
       reader.onload = () => {
         if (controlName === 'img') {
-          this.imagenPrincipal = reader.result; // Para previsualización
+          this.imagenPrincipal = reader.result;
         } else if (controlName === 'imgProfile') {
-          this.imagenPerfil = reader.result; // Para previsualización
+          this.imagenPerfil = reader.result;
         }
       };
       reader.readAsDataURL(file);
   
-      // Actualizar el formulario
       this.tallerForm.patchValue({
         [controlName]: file,
       });
   
-      // Marcar el control como tocado y actualizar su estado
       this.tallerForm.get(controlName)?.markAsTouched();
       this.tallerForm.get(controlName)?.updateValueAndValidity();
+    } else if (this.isEditMode) {
+      // Si es edición y no se selecciona un nuevo archivo, usar la URL existente
+      if (controlName === 'img') {
+        this.tallerForm.patchValue({ img: this.imagenPrincipal });
+      } else if (controlName === 'imgProfile') {
+        this.tallerForm.patchValue({ imgProfile: this.imagenPerfil });
+      }
     }
   }
   
@@ -200,21 +268,126 @@ export class AdminStoreFormComponent implements OnInit {
   }
 
   guardar(stepper: any): void {
-    if (this.tallerForm.valid && this.usuarioForm.valid) {
+    if (this.tallerForm.valid) {
       const tallerData = this.tallerForm.value;
-      const usuarioData = this.usuarioForm.value;
-      console.log('Datos del Taller:', tallerData);
-      console.log('Datos del Usuario:', usuarioData);
+      const usuarioData = (this.usuarioForm.value.selectedUsuarios || []).map((usuario: any) => {
+        return {
+          ...usuario,
+          user_name: usuario.userName, 
+          userName: undefined,
+        };
+      });
 
-      // Aquí iría la lógica para guardar el taller (crear o editar)
-      stepper.next();
+      const usuariosFinal = usuarioData.length > 0 ? usuarioData : [];
+  
+      // Crear el objeto que será enviado al backend
+      const tallerEditado = new FormData();
+  
+      // Agregar datos del taller (sin los archivos)
+      tallerEditado.append('categorias', JSON.stringify(this.categoriasSeleccionadas)); // Enviamos las categorías como un string JSON
+      tallerEditado.append('usuarios', JSON.stringify(usuariosFinal)); // Enviamos los usuarios seleccionados como string JSON
+  
+      // Agregar los datos del taller (sin las imágenes)
+      tallerEditado.append('taller', JSON.stringify({
+        id: this.isEditMode ? this.tallerOriginal.id : null, // Si estás editando, usa el id del taller
+        nombre: tallerData.nombre,
+        direccion: tallerData.direccion,
+        telefono: tallerData.telefono,
+        descripcion: tallerData.descripcion,
+        idComuna: tallerData.idComuna,
+      }));
+  
+      // Comprobación explícita para las imágenes
+      const img = this.tallerForm.get('img')?.value;
+      const imgProfile = this.tallerForm.get('imgProfile')?.value;
+      if (img) {
+        tallerEditado.append('img', img);
+      }
+      if (imgProfile) {
+        tallerEditado.append('imgProfile', imgProfile);
+      }
+  
+      // Llamada al servicio para crear o editar el taller
+      this.spinner.show();
+      if (this.isEditMode) {
+        this.tallerService.updateTaller( this.tallerOriginal.id, tallerEditado).subscribe({
+          next: (data) => {
+            this.spinner.hide();
+            this.snackBar.open(data.msg, 'Cerrar', { duration: 3000 });
+            this.volver();
+          },
+          error: (err) => {
+            console.error('Error al actualizar el taller:', err);
+            this.spinner.hide();
+            this.snackBar.open('Error al actualizar el taller.', 'Cerrar', { duration: 3000 });
+          },
+        });
+      } else {
+        this.tallerService.createTaller(tallerEditado).subscribe({
+          next: (data) => {
+            this.spinner.hide();
+            this.snackBar.open(data.msg, 'Cerrar', { duration: 3000 });
+            this.volver();
+          },
+          error: (err) => {
+            console.error('Error al actualizar el taller:', err);
+            this.spinner.hide();
+            this.snackBar.open('Error al crear el taller.', 'Cerrar', { duration: 3000 });
+          },
+        });
+      }
+    } else {
+      console.error('Formulario no válido');
     }
   }
 
-  selectUsuario(id: string): void {
-    // Actualiza el valor seleccionado cuando se hace clic en la fila
-    this.usuarioForm.patchValue({
-      selectedUsuario: id,
+  get selectedUsuarios() {
+    return (this.usuarioForm.get('selectedUsuarios') as FormArray);
+  }
+  
+  isUsuarioSelected(usuario: any): boolean {
+    const usuariosArray = this.usuarioForm.get('selectedUsuarios') as FormArray;
+    return usuariosArray.controls.some((control) => control.value.id === usuario.id);
+  }
+
+
+  
+  toggleUsuarioSelection(usuario: any, isChecked: boolean): void {
+    const usuariosArray = this.usuarioForm.get('selectedUsuarios') as FormArray;
+    if (isChecked) {
+      usuariosArray.push(this.fb.group(usuario));
+    } else {
+      const index = usuariosArray.controls.findIndex((control) => control.value.id === usuario.id);
+      if (index !== -1) {
+        usuariosArray.removeAt(index);
+      }
+    }
+  }
+
+
+  agregarUsuarioTaller(){
+
+  }
+
+  public getServerData(event:PageEvent){
+    this.callData(event);
+  }
+
+  public callData(event?: PageEvent): void {
+    const pageNum = event?.pageIndex ? event.pageIndex + 1 : 1;
+    const pageSize = event?.pageSize ? event.pageSize : 12;
+    this.spinner.show();
+    this.userService.getUsuariosTalleres(pageNum, pageSize, this.palabraClave).subscribe({
+      next: (response) => {
+        this.spinner.hide();
+        this.pageIndex = response.pageNum - 1;
+        this.length = response.total;
+        this.usuarios = new MatTableDataSource(response.list);
+      },
+      error: (err) => {
+        this.spinner.hide();
+        console.error('Error al cargar los Modelos:', err);
+      },
     });
   }
 }

@@ -23,5 +23,13 @@ export const navItems: NavItem[] = [
     bgcolor: 'primary',
     route: '/admin/brands',
   },
+  {
+    displayName: 'Usuarios',
+    iconName: 'users',
+    bgcolor: 'primary',
+    route: '/admin/users',
+  },
+
+  
 
 ];

@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { TallerService } from 'src/app/services/taller.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-stores',
@@ -90,24 +91,35 @@ export class AdminStoresComponent implements OnInit {
   }
 
   editarTaller(taller: any): void {
-    this.router.navigate(['/editar-taller', taller.id]);
+    this.router.navigate(['/admin/stores/form', taller.id]);
   }
 
   eliminarTaller(id: number): void {
-  //   if (confirm('¿Estás seguro de que deseas eliminar este taller?')) {
-  //     this.spinner.show();
-  //     this.tallerService.deleteTaller(id).subscribe({
-  //       next: () => {
-  //         this.spinner.hide();
-  //         this.callData();
-  //         this.snackBar.open('Taller eliminado con éxito.', 'Cerrar', { duration: 3000 });
-  //       },
-  //       error: (err) => {
-  //         this.spinner.hide();
-  //         console.error('Error al eliminar el taller:', err);
-  //         this.snackBar.open('Hubo un error al eliminar el taller.', 'Cerrar', { duration: 3000 });
-  //       },
-  //     });
-  //   }
+    Swal.fire({
+      title: "Está seguro?",
+      text: "El Taller quedará eliminado para siempre!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, Borrar!",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.spinner.show();
+        this.tallerService.deleteTaller(id).subscribe({
+          next: (data) => {
+            this.spinner.hide();
+            this.callData();
+            this.snackBar.open(data.msg, 'Cerrar', { duration: 3000 });
+          },
+          error: (err) => {
+            this.spinner.hide();
+            console.error('Error al eliminar el taller:', err);
+            this.snackBar.open('Hubo un error al eliminar el taller.', 'Cerrar', { duration: 3000 });
+          },
+        });
+      }
+    });
   }
 }
