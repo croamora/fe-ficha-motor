@@ -24,18 +24,38 @@
                     <div class="col-sm-6 col-lg-3">
                         <mat-card class="cardWithShadow overflow-hidden" (click)="navigateTo(vehiculo.id)" style="cursor: pointer;">
                             <a>
-                                <img src="{{ vehiculo.img }}" alt="imgSrc" class="w-100" style="height: 200px;" mat-card-image />
+                                <div class="row align-items-center">
+
+                                    <div class="container">
+                                        <div class="license-plate">
+                                          <div class="license-text">
+                                            <!-- Parte izquierda de la patente -->
+                                            <span>{{ vehiculo.patente | slice: 0:2 }}</span>
+                                            <!-- Separador central -->
+                                            <span class="separator">•</span>
+                                            <!-- Parte central de la patente -->
+                                            <span>{{ vehiculo.patente | slice: 2:4 }}</span>
+                                            <!-- Separador final -->
+                                            <span class="separator">•</span>
+                                            <!-- Parte derecha de la patente -->
+                                            <span>{{ vehiculo.patente | slice: 4 }}</span>
+                                          </div>
+                                          <div class="license-country">CHILE</div>
+                                        </div>
+                                      </div>
+                                      
+                                </div>
                             </a>
-                            <mat-card-content class="p-b-24 p-t-12 position-relative" style="padding: 10px;">
+                            <mat-card-content class="p-b-24 p-t-12 position-relative" style="padding: 10px;text-align: center;">
                                 <!-- <button mat-mini-fab color="primary" class="icon-30 cart-btn" matTooltip="Add to Cart">
                                     <i-tabler name="map-pin" class="icon-16"></i-tabler>
                                 </button> -->
                                 <mat-card-title class="mat-headline-2 f-s-16 m-b-4">{{
-                                    vehiculo.nombre
+                                    vehiculo.marca.marca + ' ' + vehiculo.modelo.modelo
                                     }}</mat-card-title>
-                                <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center justify-content-center">
                                     <div class="d-flex align-items-center">
-                                        <h6 class="mat-body-2 f-w-600"> <i-tabler name="map-pin" class="icon-16"></i-tabler> {{ vehiculo.direccion }}</h6>
+                                        <h6 class="mat-body-2 f-w-600"> {{  vehiculo.anio }}</h6>
                                     </div>
 
                                 </div>

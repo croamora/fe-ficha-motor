@@ -11,6 +11,7 @@ import { MaterialModule } from '../../../material.module';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-side-login',
@@ -33,7 +34,9 @@ export class AppSideLoginComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private spinner: NgxSpinnerService) { }
+    private spinner: NgxSpinnerService,
+    private snackBar: MatSnackBar,
+  ) { }
 
   form = new FormGroup({
     uname: new FormControl('', [Validators.required, Validators.minLength(4)]),
@@ -69,6 +72,7 @@ export class AppSideLoginComponent implements OnInit {
         },
         error: (err) => {
           this.spinner.hide();
+          this.snackBar.open('Credenciales Invalidas.', 'Cerrar', { duration: 3000 });
           console.error('credenciales invalidas:', err);
         },
       });

@@ -11,14 +11,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { TablerIconsModule } from 'angular-tabler-icons';
-import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
 import { MarcaService } from 'src/app/services/marca.service';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form-client-cars',
@@ -59,7 +61,9 @@ export class FormClientCarsComponent implements OnInit {
     private router : Router,
     private fb: FormBuilder,
     private vehiculoService: VehiculoService,
-    private marcaService: MarcaService
+    private marcaService: MarcaService,
+    private spinner: NgxSpinnerService,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -97,13 +101,15 @@ export class FormClientCarsComponent implements OnInit {
     );
   }
 
-  // Verificar si la patente ya existe
   checkPatente(): void {
     const patente = this.carForm.get('patente')?.value;
-    this.vehiculoService.checkVehicle(patente).subscribe(
-      (exists) => {
+    this.spinner.show();
+    this.vehiculoService.checkVehicle(patente).subscribe({
+      next: (exists) => {
         this.carExists = exists;
-        if (exists) {
+        this.spinner.hide();
+        if (exists) {         
+          this.getVehiculoByPatente(patente);
           this.carForm.get('marca')?.disable();
           this.carForm.get('modelo')?.disable();
           this.carForm.get('anio')?.disable();
@@ -113,8 +119,53 @@ export class FormClientCarsComponent implements OnInit {
           this.carForm.get('anio')?.enable();
         }
       },
-      (error) => console.error(error)
-    );
+      error: (err) => { 
+        console.error(err)
+      },
+    });
+  }
+
+  getVehiculoByPatente(patente : string) : void{
+    this.vehiculoService.getVehiculoByPatente(patente).subscribe({
+      next: (vehiculo) => {
+        if(vehiculo.asignado){
+          Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "El Vehículo ya existe asignado a otra persona!",
+            html: `
+                    El Vehículo ya existe asignado a otra persona!, si el vehículo le pertenece puede solicitar que se le transfiera a sus vehículos
+                  `,
+            showCancelButton: true,
+            confirmButtonText: "Solicitar Transferencia",
+            cancelButtonText: "Cancelar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire("Saved!", "", "success");
+            } 
+          });
+        } else {
+          Swal.fire({
+            icon: "info",
+            title: "Oops...",
+            text: "El Vehículo ya existe!",
+            html: `
+                    El Vehículo ya existe, si el vehículo le pertenece puede asignarlo a sus vehículos
+                  `,
+            showCancelButton: true,
+            confirmButtonText: "Asignarmelo",
+            cancelButtonText: "Cancelar",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire("Saved!", "", "success");
+            } 
+          });
+        }
+      },
+      error: (err) => { 
+        console.error(err)
+      },
+    });
   }
 
   onPatenteInput(event: Event): void {
@@ -171,18 +222,33 @@ export class FormClientCarsComponent implements OnInit {
   // Manejar selección de marca para cargar modelos
   onMarcaChange(marca: any): void {
     this.selectedMarca = marca;
-    this.marcaService.getModelosByMarca(marca.id).subscribe(
-      (modelos) => {
+    this.marcaService.getModelosByMarca(marca.id).subscribe({
+      next: (modelos) => {
         this.modelos = modelos; 
         this.modelosFiltrados = this.filterModelos("");
       },
-      (error) => console.error(error)
-    );
+      error: (err) => { 
+         console.error(err)
+      }
+    });
   }
 
   onSubmit(): void {
     if (this.carForm.valid) {
-      console.log('Datos del vehículo:', this.carForm.value);
+      const newVehiculo = this.carForm.value;
+      this.spinner.show();
+      this.vehiculoService.save(newVehiculo).subscribe({
+        next: (result) => {
+          this.spinner.hide();
+          this.snackBar.open(result.msg, 'Cerrar', { duration: 3000 });
+          this.volver();
+        },
+        error: (err) => { 
+          console.error('Error al Crear el vehiculo:', err);
+          this.spinner.hide();
+          this.snackBar.open('Error al crear el vehiculo.', 'Cerrar', { duration: 3000 });
+        }
+      });
     }
   }
 

@@ -134,7 +134,7 @@ export class DetalleEmpresaComponent implements OnInit {
   }
 
   openWhatsApp(): void {
-    const phone = this.taller.telefono.replace(/[^0-9]/g, ''); // Limpia el número
+    const phone = 569 + this.taller.telefono.replace(/[^0-9]/g, ''); // Limpia el número
     const message = encodeURIComponent('Hola, quiero conocer más de sus servicios.');
     const url = `https://api.whatsapp.com/send/?phone=${phone}&text=${message}&type=phone_number&app_absent=0`;
     window.open(url, '_blank'); // Abrir en una nueva pestaña
