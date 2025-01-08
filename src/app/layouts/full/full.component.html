@@ -15,12 +15,17 @@
           }
         </mat-nav-list>
       </ng-scrollbar>
-      <div class="p-16 m-t-16">
-        <!-- <a mat-flat-button color="primary"
-          href="https://www.wrappixel.com/templates/spike-angular-admin-template/?ref=33" target="_blank"
-          class="d-flex justify-content-center w-100">
-          Upgrade to Pro
-        </a> -->
+      <div class="p-16 m-t-16" *ngIf="isUserStore()">
+
+        <mat-form-field appearance="fill" class="full-width camouflaged-select" style="width: 100%;">
+          <mat-label>Taller Seleccionado</mat-label>
+          <mat-select [(value)]="selectedStore" (selectionChange)="onOptionChange($event)">
+            <mat-option *ngFor="let store of stores" [value]="store">
+              {{ store.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>        
+
       </div>
     </div>
   </mat-sidenav>

@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { jwtDecode } from "jwt-decode";
 import { Router } from '@angular/router';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private storageService: StorageService,
   ) {}
 
 
@@ -51,6 +53,7 @@ export class AuthService {
   logout() {
     // Eliminar el token de localStorage
     localStorage.removeItem(this.TOKEN_KEY);
+    this.storageService.removeAll();
     this.router.navigate(['/authentication/login']);
   }
 

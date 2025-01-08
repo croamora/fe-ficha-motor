@@ -3,15 +3,22 @@ import { Injectable } from '@angular/core';
 import { Observable} from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { PaginationModel } from '../models/pagination-model';
+import { StorageService } from './storage.service';
 
 
 @Injectable({ providedIn: 'root' })
 export class TallerService {
-       
+          
+
+    public stores : any[];
+    public selectedStore: any;
     
     private readonly apiUrl = environment.apiEndpoint + 'taller';
 
-    constructor(private http:HttpClient) {}
+    constructor(
+        private http:HttpClient, 
+        private storageService:StorageService
+    ) {}
 
 
     getTalleres(pageNum: number, pageSize: number, palabraClave: string) : Observable<PaginationModel>{
@@ -40,4 +47,11 @@ export class TallerService {
     deleteTaller(id: number) : Observable<any>{
         return this.http.delete(this.apiUrl + '/' + id, { withCredentials: true });
     }
+
+
+    getTalleresByIdUser() : Observable<any[]>{
+        return this.http.get<any>(this.apiUrl + '/stores', { withCredentials: true });
+    }
+
+
 }

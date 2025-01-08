@@ -15,7 +15,7 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     if (request.url.includes(`${environment.apiEndpoint}auth/login`)
-      || request.url.includes(`${environment.apiEndpoint}taller`)
+      || request.url === `${environment.apiEndpoint}taller`
       || request.url.includes(`${environment.apiEndpoint}auth/createClientUser`)
     ) {
       return next.handle(request);

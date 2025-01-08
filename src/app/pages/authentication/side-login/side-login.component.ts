@@ -12,6 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TallerService } from 'src/app/services/taller.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-side-login',
@@ -34,6 +36,8 @@ export class AppSideLoginComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private tallerService: TallerService,
+    private storageService: StorageService,
     private spinner: NgxSpinnerService,
     private snackBar: MatSnackBar,
   ) { }
@@ -65,9 +69,7 @@ export class AppSideLoginComponent implements OnInit {
       this.authService.login(uname ?? '', password ?? '').subscribe({
         next: (response) => {
           this.spinner.hide();
-          // Guardar el token recibido del backend
           this.authService.saveToken(response.token);
-           // Redirigir según el perfil
           this.redirectBasedOnProfile();
         },
         error: (err) => {
@@ -85,7 +87,6 @@ export class AppSideLoginComponent implements OnInit {
 
 
   private redirectBasedOnProfile() {
-    
     switch (this.authService.getProfileFromToken()) {
       case 1:
         this.router.navigate(['/admin']);
@@ -94,7 +95,17 @@ export class AppSideLoginComponent implements OnInit {
         this.router.navigate(['/client']);
         break;
       case 3:
-        this.router.navigate(['/store']);
+        this.tallerService.getTalleresByIdUser().subscribe({
+          next: (data) => {
+              this.storageService.saveStores(data);
+              this.storageService.saveSelectedStore(data[0]);
+              this.router.navigate(['/store']);
+          },
+          error: (err) => {
+            console.error('Error al cargar los talleres:', err);
+          },
+        });
+        
         break;
       default:
         this.router.navigate(['/descubrir']);

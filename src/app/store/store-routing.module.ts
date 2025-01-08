@@ -1,6 +1,8 @@
 import { RouterModule, Routes } from '@angular/router';
 import { StoreDashboardComponent } from './components/store-dashboard/store-dashboard.component';
 import { NgModule } from '@angular/core';
+import { StoreCotizationsComponent } from './components/store-cotizations/store-cotizations.component';
+import { StoreWorkOrdersComponent } from './components/store-work-orders/store-work-orders.component';
 
 export const storeRoutes: Routes = [
   {
@@ -10,6 +12,20 @@ export const storeRoutes: Routes = [
         path: '',
         component: StoreDashboardComponent,
       },
+      {
+        path: 'cotizations',
+        component: StoreCotizationsComponent,
+      },
+      {
+        path: 'orders',
+        component: StoreWorkOrdersComponent,
+      },
+      {
+        path: 'config',
+        loadChildren: () =>
+          import('./components/store-config/store-config.module').then((m) => m.StoreConfigModule),
+      },
+      
     ],
   },
 ];

@@ -12,6 +12,7 @@ import { DateAdapter, CalendarModule, CalendarEvent, CalendarEventTimesChangedEv
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { Subject } from 'rxjs';
+import Swal from 'sweetalert2';
 import { CalendarConfigModule } from '../calendar/calendar-config/calendar-config.modulet';
 
 @Component({
@@ -48,14 +49,30 @@ export class AppTooltipsComponent {
   message = new FormControl('Info about the action');
 
 
-  eventTimesChanged({
-    event,
-    newStart,
-    newEnd,
-  }: CalendarEventTimesChangedEvent): void {
-    event.start = newStart;
-    event.end = newEnd;
-    this.refresh.next();
-  }
+
   
+  agendarModal(event: any): void {
+
+    const formattedDate = new Intl.DateTimeFormat("es-CL", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false, // Usar formato 24 horas
+    }).format(event.date);
+
+    
+    Swal.fire({
+      title: "Hora Seleccionada",
+      text: formattedDate,
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Aceptar!",
+      cancelButtonText: "Cancelar"
+    })
+  }
+
 }

@@ -11,10 +11,46 @@ export const navItems: NavItem[] = [
     route: '/store',
   },
   {
-    displayName: 'Ordenes',
+    displayName: 'Cotizaciones',
+    iconName: 'file-dollar',
+    bgcolor: 'primary',
+    route: '/store/cotizations',
+  },
+  {
+    displayName: 'Ordenes de Trabajo',
     iconName: 'checkup-list',
     bgcolor: 'primary',
     route: '/store/orders',
   },
-
+  {
+    displayName: 'Configuraciones',
+    iconName: 'settings-cog',
+    bgcolor: 'primary',
+    children: [
+      {
+        displayName: 'Usuarios',
+        iconName: 'users',
+        bgcolor: 'accent',
+        route: '/store/config/users',
+      },
+      {
+        displayName: 'Disponibilidad',
+        iconName: 'calendar-clock',
+        bgcolor: 'accent',
+        route: '/store/config/disponibility',
+      },
+      {
+        displayName: 'Servicios',
+        iconName: 'tool',
+        bgcolor: 'accent',
+        route: '/store/config/services',
+      },
+      {
+        displayName: 'Valores',
+        iconName: 'database-dollar',
+        bgcolor: 'accent',
+        route: '/store/config/prices',
+      },
+    ]
+  },
 ];

@@ -20,6 +20,8 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { HeaderComponent } from './header/header.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { NavItem } from './sidebar/nav-item/nav-item';
+import { TallerService } from 'src/app/services/taller.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 const MOBILE_VIEW = 'screen and (max-width: 768px)';
 const TABLET_VIEW = 'screen and (min-width: 769px) and (max-width: 1024px)';
@@ -41,13 +43,15 @@ const BELOWMONITOR = 'screen and (max-width: 1023px)';
     HeaderComponent,
   ],
   templateUrl: './full.component.html',
-  styleUrls: [],
+  styleUrl: './full.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
 
 export class FullComponent implements OnInit {
 
   navItems: NavItem[] = [];
+  stores : any[] = [];
+  selectedStore : any[] = [];
 
   @ViewChild('leftsidenav')
   public sidenav: MatSidenav | any;
@@ -65,7 +69,8 @@ export class FullComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver, 
-    private navService: NavService,
+    private router: Router,
+    private storageService: StorageService, 
     private authService : AuthService) {
 
     this.htmlElement = document.querySelector('html')!;
@@ -82,6 +87,9 @@ export class FullComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.stores = this.storageService.getStores();
+    const storedSelectedStore = this.storageService.getSelectedStore();
+    this.selectedStore = this.stores.find(store => store.id === storedSelectedStore?.id) || null;
     this.loadNavItemsBasedOnProfile();
   }
 
@@ -106,6 +114,17 @@ export class FullComponent implements OnInit {
     }
   }
   
+  onOptionChange(event: any): void {
+    this.selectedStore = event.value;
+    this.storageService.saveSelectedStore(this.selectedStore);
+    this.router.navigate(['/store']);
+  }
+
+  isUserStore(){
+    return this.authService.isAuthenticated() 
+              && this.authService.getProfileFromToken() === 3;
+  }
+
   ngOnDestroy() {
     this.layoutChangesSubscription.unsubscribe(); 
   }

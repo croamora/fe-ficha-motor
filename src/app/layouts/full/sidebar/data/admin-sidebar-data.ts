@@ -29,7 +29,6 @@ export const navItems: NavItem[] = [
     bgcolor: 'primary',
     route: '/admin/users',
   },
-
   
 
 ];
