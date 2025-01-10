@@ -50,7 +50,7 @@
 
 <!-- children -->
 @if(expanded) {
-<div>
+<div style="padding-left: 20px;">
   @for(child of item.children; track child) {
   <app-nav-item [item]="child" (click)="onSubItemSelected(child)" [depth]="depth + 1">
   </app-nav-item>
