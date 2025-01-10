@@ -16,6 +16,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     if (request.url.includes(`${environment.apiEndpoint}auth/login`)
       || request.url === `${environment.apiEndpoint}taller`
+      || request.url.includes(`${environment.apiEndpoint}taller?pageNum=`)
       || request.url.includes(`${environment.apiEndpoint}auth/createClientUser`)
     ) {
       return next.handle(request);

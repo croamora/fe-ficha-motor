@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { AuthService } from 'src/app/services/auth.service';
 import { TallerService } from 'src/app/services/taller.service';
 
 
@@ -58,7 +59,8 @@ export class DescubrirComponent implements OnInit {
   constructor(
     private router: Router,
     private tallerService: TallerService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private authService : AuthService
   ) { }
 
 
@@ -94,4 +96,13 @@ export class DescubrirComponent implements OnInit {
     this.router.navigate([`/descubrir/detalle-empresa/${epresaId}`]);
   }
 
+
+  iraMisVehiculos(){
+    this.router.navigate([`/client/cars`]);
+  }
+
+  isUserClient(){
+    return this.authService.isAuthenticated() 
+              && this.authService.getProfileFromToken() === 2;
+  }
 }

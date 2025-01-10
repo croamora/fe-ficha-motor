@@ -15,11 +15,11 @@ export const navItems: NavItem[] = [
     bgcolor: 'primary',
     route: '/client/cars',
   },
-  {
-    displayName: 'Mis Servicios',
-    iconName: 'checkup-list',
-    bgcolor: 'primary',
-    route: '/client/services',
-  },
+  // {
+  //   displayName: 'Mis Servicios',
+  //   iconName: 'checkup-list',
+  //   bgcolor: 'primary',
+  //   route: '/client/services',
+  // },
   
 ];

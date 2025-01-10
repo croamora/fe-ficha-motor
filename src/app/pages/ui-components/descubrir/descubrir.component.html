@@ -1,19 +1,18 @@
-<!-- <mat-card class="cardWithShadow theme-card">
+<mat-card class="cardWithShadow theme-card" style="margin-bottom: 10px;" *ngIf="isUserClient()" >
     <mat-card-header class="header-with-button">
-        <mat-card-title class="m-b-0">hola</mat-card-title>
-        <button 
-            mat-flat-button 
-            color="primary" 
-            matBadge="8" 
-            matBadgePosition="before" 
-            matBadgeColor="accent"
-            >
-            <i-tabler class="custom-icon" name="edit"></i-tabler>
-            <span class="button-text">Editar</span>
-        </button>
+      <button 
+        mat-flat-button 
+        color="primary" 
+        matBadge="8" 
+        matBadgePosition="before" 
+        matBadgeColor="accent"
+        (click)="iraMisVehiculos()"
+      >
+        <i-tabler class="custom-icon" name="plus"></i-tabler>
+        <span class="button-text">Agregar tus Vehículos</span>
+      </button>
     </mat-card-header>
-</mat-card> -->
-  
+</mat-card>
 
 <mat-card class="cardWithShadow theme-card">
     <mat-card-content class="b-t-1">

@@ -75,7 +75,8 @@ export class AppSideRegisterComponent {
         },
         error: (err) => {
           this.spinner.hide();
-          console.error('Error al guardar el campeonato:', err);
+          this.router.navigate(['/authentication/login']);
+          console.error('Error al Registrar el usuario:', err);
         }
       });
     }
