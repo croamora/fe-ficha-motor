@@ -18,6 +18,7 @@ export class AuthInterceptor implements HttpInterceptor {
       || request.url.includes(`${environment.apiEndpoint}auth/recuperar`)
       || request.url.includes(`${environment.apiEndpoint}auth/codigo`)
       || request.url.includes(`${environment.apiEndpoint}auth/changePassword`)
+      || request.url.includes(`${environment.apiEndpoint}images`)
       || request.url === `${environment.apiEndpoint}taller`
       || request.url.includes(`${environment.apiEndpoint}taller?pageNum=`)
       || request.url.includes(`${environment.apiEndpoint}auth/createClientUser`)
