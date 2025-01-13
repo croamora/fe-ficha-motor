@@ -20,10 +20,9 @@ export class AuthInterceptor implements HttpInterceptor {
       || request.url.includes(`${environment.apiEndpoint}auth/changePassword`)
       || request.url.includes(`${environment.apiEndpoint}images`)
       || request.url === `${environment.apiEndpoint}taller`
-      || request.url.includes(`${environment.apiEndpoint}descubrir/detalle-empresa`)
       || request.url.includes(`${environment.apiEndpoint}taller?pageNum=`)
-      || request.url.includes(`${environment.apiEndpoint}taller/`)
       || request.url.includes(`${environment.apiEndpoint}auth/createClientUser`)
+      || new RegExp(`${environment.apiEndpoint}taller/\\d+$`).test(request.url)
     ) {
       return next.handle(request);
     }
