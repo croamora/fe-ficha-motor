@@ -1,1 +1,83 @@
-<p>store-config-disponibility works!</p>
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-content class="b-t-1">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    
+                    <div [formGroup]="form" class="schedule-container">
+                        <div *ngFor="let day of days; let i = index" class="day-row">
+                          <div class="day-label">
+                            <label>
+                              <input
+                                type="checkbox"
+                                [formControlName]="'closed_' + i"
+                                (change)="toggleDayState(i)"
+                              />
+                              Cerrada
+                            </label>
+                            <span>{{ day.name }}</span>
+                          </div>
+                          <div class="time-fields-group" *ngIf="!form.get('closed_' + i)?.value">
+                            
+                            
+                            
+                            
+                            <div *ngFor="let time of days[i].times; let j = index" class="time-slot">
+
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Abre a la(s)</mat-label>
+                                    <input
+                                      matInput
+                                      [ngxTimepicker]="timepickerOpen"
+                                      [formControlName]="'time_' + i + '_' + j + '_open'"
+                                      placeholder="Abre a la(s)"
+                                      readonly
+                                    />
+                                    <ngx-material-timepicker #timepickerOpen></ngx-material-timepicker>
+                                  </mat-form-field>
+                                  
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>Cierra a la(s)</mat-label>
+                                    <input
+                                      matInput
+                                      [ngxTimepicker]="timepickerClose"
+                                      [formControlName]="'time_' + i + '_' + j + '_close'"
+                                      placeholder="Cierra a la(s)"
+                                      readonly
+                                    />
+                                    <ngx-material-timepicker #timepickerClose></ngx-material-timepicker>
+                                  </mat-form-field>
+                                  
+                                  
+                                <!-- Mostrar botón de eliminar solo si no es el primer horario -->
+                                <button 
+                                  type="button" 
+                                  class="remove-button"
+                                  *ngIf="j != 0" 
+                                  (click)="removeTimeSlot(i, j)">
+                                  -
+                                </button>
+                                <button class="add-button"  
+                                  *ngIf="j === 0"  
+                                  type="button" 
+                                  (click)="addTimeSlot(i)">
+                                  +
+                                </button>
+                              </div>
+                              
+                              
+                            
+                          </div>
+                        </div>
+                        <div class="button-container">
+                          <button class="btn-primary" (click)="save()">Guardar</button>
+                        </div>
+                      </div>
+                      
+                      
+                      
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

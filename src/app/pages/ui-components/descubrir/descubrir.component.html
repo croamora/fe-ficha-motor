@@ -18,6 +18,28 @@
     <mat-card-content class="b-t-1">
         <div class="row">
             <div class="col-md-12">
+
+                <div class="row">
+                    <div class="container" style="text-align: center;">
+                       
+                        <div class="header">
+                          <mat-form-field appearance="outline">
+                            <mat-label>Que Servicio Necesito</mat-label>
+                            <input matInput [(ngModel)]="palabraClave"
+                            (keydown.enter)="callData()"
+                             placeholder="Escribe aquí..." />
+                          </mat-form-field>
+                          <button mat-raised-button color="primary"
+                          (click)="callData()"
+                           style="height: 50px;
+                                margin-top: -80px;
+                                margin-left: 10px;" >
+                            <i-tabler class="custom-icon" name="search"></i-tabler>
+                          </button>
+                        </div>
+                    
+                  </div>
+                </div>
                 <div class="row">
                     @for(taller of talleres; track taller.nombre) {
                     <div class="col-sm-6 col-lg-3">
