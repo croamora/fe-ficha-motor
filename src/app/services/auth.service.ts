@@ -28,6 +28,23 @@ export class AuthService {
     return this.http.post<any>(environment.apiEndpoint + 'auth/createClientUser', newUser);
   }
 
+  recoveryRequest(email: string) : Observable<any>{
+    const mailForm = new FormData();
+    mailForm.append('email', email);
+    return this.http.post<any>(environment.apiEndpoint + 'auth/recuperar', mailForm);
+  }
+
+  getUserbyCode(codigo: string) : Observable<any>{
+    return this.http.get<any>(environment.apiEndpoint + 'auth/codigo/' + codigo);
+  }
+
+  changePassword(codigo: string, password: string) : Observable<any> {
+    const changePassForm = new FormData();
+    changePassForm.append('codigo', codigo);
+    changePassForm.append('password', password);
+    return this.http.put<any>(environment.apiEndpoint + 'auth/changePassword', changePassForm);
+  }
+
   isAuthenticated(): boolean {
     const token = localStorage.getItem(this.TOKEN_KEY);
   

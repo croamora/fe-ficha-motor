@@ -118,6 +118,7 @@ export class FormClientCarsComponent implements OnInit {
           this.carForm.get('modelo')?.enable();
           this.carForm.get('anio')?.enable();
         }
+        this.carForm.get('patente')?.disable();
       },
       error: (err) => { 
         console.error(err)

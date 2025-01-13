@@ -15,6 +15,9 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     if (request.url.includes(`${environment.apiEndpoint}auth/login`)
+      || request.url.includes(`${environment.apiEndpoint}auth/recuperar`)
+      || request.url.includes(`${environment.apiEndpoint}auth/codigo`)
+      || request.url.includes(`${environment.apiEndpoint}auth/changePassword`)
       || request.url === `${environment.apiEndpoint}taller`
       || request.url.includes(`${environment.apiEndpoint}taller?pageNum=`)
       || request.url.includes(`${environment.apiEndpoint}auth/createClientUser`)
@@ -25,7 +28,6 @@ export class AuthInterceptor implements HttpInterceptor {
     const token = localStorage.getItem('authToken');
 
     if (!token) {
-      // Redirige al login si no hay token
       this.router.navigate(['/authentication/login']);
       return new Observable<HttpEvent<any>>();
     }
