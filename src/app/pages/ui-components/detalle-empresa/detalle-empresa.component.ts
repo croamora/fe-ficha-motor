@@ -77,7 +77,7 @@ export class DetalleEmpresaComponent implements OnInit {
 
   loadMap(): void {
     const loader = new Loader({
-      apiKey: 'AIzaSyABGyRzLv-nzA6DeF4hJSjUAgbULZYPiiU', // Reemplaza con tu clave de API
+      apiKey: 'AIzaSyBlFzeDeDjUYYUZtDoShCemxMJx8Q8Usdk', // Reemplaza con tu clave de API
       version: 'weekly',
       libraries: ['marker'], // Incluye librerías necesarias
     });
