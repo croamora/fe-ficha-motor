@@ -3,6 +3,7 @@ import { StoreDashboardComponent } from './components/store-dashboard/store-dash
 import { NgModule } from '@angular/core';
 import { StoreCotizationsComponent } from './components/store-cotizations/store-cotizations.component';
 import { StoreWorkOrdersComponent } from './components/store-work-orders/store-work-orders.component';
+import { StoreScheduleComponent } from './components/store-schedule/store-schedule.component';
 
 export const storeRoutes: Routes = [
   {
@@ -19,6 +20,10 @@ export const storeRoutes: Routes = [
       {
         path: 'orders',
         component: StoreWorkOrdersComponent,
+      },
+      {
+        path: 'schedule',
+        component: StoreScheduleComponent,
       },
       {
         path: 'config',

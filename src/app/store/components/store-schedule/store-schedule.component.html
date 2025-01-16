@@ -1,0 +1,55 @@
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-content class="b-t-1">
+        <div>
+            <div class="col-md-4">
+                <div class="btn-group">
+                  <button
+                        class="btn btn-primary"
+                        (click)="setView(CalendarView.Week)"
+                        [class.active]="view === CalendarView.Week"
+                    >
+                        Semana
+                  </button>
+                  <button
+                        class="btn btn-primary"
+                        (click)="setView(CalendarView.Day)"
+                        [class.active]="view === CalendarView.Day"
+                    >
+                        Día
+                  </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12">
+            <div [ngSwitch]="view">
+                <mwl-calendar-week-view
+                    *ngSwitchCase="CalendarView.Week"
+                    [viewDate]="viewDate"
+                    [events]="events"
+                    [weekStartsOn]="weekStartsOn"
+                    [refresh]="refresh"
+                    [locale]="locale"
+                    [dayStartHour]="8"
+                    [dayEndHour]="24"
+                    [hourSegments]="2"
+                    (hourSegmentClicked)="agendarModal($event)"
+                    >
+                    </mwl-calendar-week-view>
+
+                <mwl-calendar-day-view
+                    *ngSwitchCase="CalendarView.Day"
+                    [viewDate]="viewDate"
+                    [dayStartHour]="8"
+                    [dayEndHour]="24"
+                    [locale]="locale"
+                    [events]="events"
+                    [refresh]="refresh"
+                >
+                </mwl-calendar-day-view>
+            </div>
+        </div>   
+        </div>
+    </mat-card-content>
+
+</mat-card>

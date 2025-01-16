@@ -23,6 +23,13 @@ export const navItems: NavItem[] = [
     route: '/store/orders',
   },
   {
+    displayName: 'Agenda',
+    iconName: 'calendar-time',
+    bgcolor: 'primary',
+    route: '/store/schedule',
+  },
+  
+  {
     displayName: 'Configuraciones',
     iconName: 'settings-cog',
     bgcolor: 'primary',
