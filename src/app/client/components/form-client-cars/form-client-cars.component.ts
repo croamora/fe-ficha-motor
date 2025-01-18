@@ -22,6 +22,7 @@ import { DataService } from 'src/app/services/data.service';
 import { MarcaService } from 'src/app/services/marca.service';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
 import Swal from 'sweetalert2';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-form-client-cars',
@@ -71,6 +72,8 @@ export class FormClientCarsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.loadData();
     this.currentYear = this.currentYear + 1;
     // Inicializar formulario
     this.carForm = this.fb.group({
@@ -106,30 +109,27 @@ export class FormClientCarsComponent implements OnInit {
       switchMap((value) => this.filterModelos(value || ''))
     );
 
-    this.loadData();
+   
 
 
   }
 
-  loadData(){
-    this.dataService.getAllCombustibleType().subscribe({
-      next: (response) => {
-        this.combustibleTypeList = response;
-      },
-      error: (err) => {
-        console.error('Error al cargar los tipos de combustible:', err);
-      },
-    });
 
-    this.dataService.getAllVehicleType().subscribe({
+  loadData() {
+    forkJoin({
+      combustibleTypes: this.dataService.getAllCombustibleType(),
+      vehicleTypes: this.dataService.getAllVehicleType()
+    }).subscribe({
       next: (response) => {
-        this.vehicleTypeList = response;
+        this.combustibleTypeList = response.combustibleTypes;
+        this.vehicleTypeList = response.vehicleTypes;
       },
       error: (err) => {
-        console.error('Error al cargar los tipos de vehículo:', err);
+        console.error('Error al cargar los datos:', err);
       },
     });
   }
+
 
   checkPatente(): void {
     const patente = this.carForm.get('patente')?.value;
@@ -277,7 +277,7 @@ export class FormClientCarsComponent implements OnInit {
       // Elimina las propiedades originales si no las necesitas
       delete newVehiculo.tipoVehiculo;
       delete newVehiculo.tipoCombustible;
-      
+
       this.spinner.show();
       this.vehiculoService.save(newVehiculo).subscribe({
         next: (result) => {
