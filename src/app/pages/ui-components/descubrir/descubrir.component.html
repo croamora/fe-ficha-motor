@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between" *ngIf="taller.distancia">
                                     <div class="d-flex align-items-center">
-                                        <h6 class="mat-body-2 f-w-400"> {{ taller.distancia }} km de distancia</h6>
+                                        <h6 class="mat-body-2 f-w-400"> {{ taller.distancia | number:'1.1-1' }} km de distancia</h6>
                                     </div>
                                 </div>
                             </mat-card-content>
