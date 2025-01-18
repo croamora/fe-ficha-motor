@@ -60,6 +60,8 @@ export class FormClientCarsComponent implements OnInit {
   patentePreview: string = '';
   selectedMarca: any;
   selectedModelo: any;
+  selectedCombustibleType: any;
+  selectedVehicleType: any;
 
   constructor(
     private router : Router,
@@ -250,6 +252,15 @@ export class FormClientCarsComponent implements OnInit {
   onModeloChange(modelo: any) {
     this.selectedModelo = modelo;
   }
+
+  onTipoVehiculoChange(vehicleType : any){
+    this.selectedVehicleType = vehicleType;
+  }
+
+  onTipoCombustibleChange(combustibleType : any){
+    this.selectedCombustibleType = combustibleType;
+  }
+
   // Manejar selección de marca para cargar modelos
   onMarcaChange(marca: any): void {
     this.selectedMarca = marca;

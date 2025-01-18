@@ -1,8 +1,8 @@
 <mat-card class="cardWithShadow theme-card" style="margin-bottom: 10px;">
   <mat-card-header class="header-container">
-    <button 
-      mat-flat-button 
-      color="primary" 
+    <button
+      mat-flat-button
+      color="primary"
       (click)="volver()"
       class="volver-button"
     >
@@ -16,7 +16,7 @@
   </mat-card-header>
 </mat-card>
 
-  
+
   <mat-card class="cardWithShadow theme-card" style="margin-bottom: 10px;">
     <mat-card-content>
 
@@ -39,7 +39,7 @@
                   <div class="license-country">CHILE</div>
                 </div>
               </div>
-              
+
         </div>
 
 
@@ -58,24 +58,24 @@
                     maxlength="6"
                     (input)="onPatenteInput($event)"
                     />
-                    
+
                     <mat-error *ngIf="carForm.get('patente')?.invalid">
                     Patente inválida. Solo se permiten 8 caracteres alfanuméricos.
                     </mat-error>
                 </mat-form-field>
-                
+
             </div>
-        
+
             <div style="width: 20%;display: inline-block;">
                 <button mat-flat-button color="primary" style="    padding: 22px 20px;margin-left: 10px;" (click)="checkPatente()">
                   <i-tabler class="custom-icon" name="search"></i-tabler>
                 </button>
               </div>
         </div>
-       
-          
-        
-  
+
+
+
+
         <!-- Mostrar el resto del formulario solo si la patente no existe -->
         <div *ngIf="!carExists">
             <mat-form-field appearance="fill" class="full-width">
@@ -93,7 +93,7 @@
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
-              
+
               <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Modelo</mat-label>
                 <input
@@ -113,25 +113,58 @@
               <!-- tipo Vehiculo -->
               <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Tipo de Vehículo</mat-label>
+                <input
+                  matInput
+                  [matAutocomplete]="tipoVehiculo"
+                  formControlName="tipoVehiculo"
+                  [value]="selectedVehicleType ? selectedVehicleType.vehicleTypeName : ''"
+                />
+                <mat-autocomplete #tipoVehiculo="matAutocomplete" (optionSelected)="onTipoVehiculoChange($event.option.value)" >
+                  <mat-option *ngFor="let vehicleType of vehicleTypeList" [value]="vehicleType">
+                    {{ vehicleType.vehicleTypeName }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+<!-- 
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Tipo de Vehículo</mat-label>
                 <mat-select formControlName="tipoVehiculo">
                   <mat-option *ngFor="let vehicleType of vehicleTypeList" [value]="vehicleType">
                     {{ vehicleType.vehicleTypeName }}
                   </mat-option>
                 </mat-select>
+              </mat-form-field> -->
+
+
+               <!-- tipo Combustible -->
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Tipo de Combustible</mat-label>
+                <input
+                  matInput
+                  [matAutocomplete]="tipoCombustible"
+                  formControlName="tipoCombustible"
+                  [value]="selectedCombustibleType ? selectedCombustibleType.combustibleName : ''"
+                />
+                <mat-autocomplete #tipoCombustible="matAutocomplete" (optionSelected)="onTipoCombustibleChange($event.option.value)" >
+                  <mat-option *ngFor="let combustibleType of combustibleTypeList" [value]="combustibleType">
+                    {{ combustibleType.combustibleName }}
+                  </mat-option>
+                </mat-autocomplete>
               </mat-form-field>
 
 
-               <!-- tipo Vehiculo -->
-               <mat-form-field appearance="fill" class="full-width">
+              
+               <!-- <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Tipo de Combustible</mat-label>
                 <mat-select formControlName="tipoCombustible">
                   <mat-option *ngFor="let combustibleType of combustibleTypeList" [value]="combustibleType">
                     {{ combustibleType.combustibleName }}
                   </mat-option>
                 </mat-select>
-              </mat-form-field>
-              
-              
+              </mat-form-field> -->
+
+
           <!-- Campo de Año -->
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Año</mat-label>
@@ -143,7 +176,7 @@
               [max]="currentYear"
             />
           </mat-form-field>
-  
+
           <button mat-flat-button color="primary" type="submit" [disabled]="carForm.invalid">
             Guardar
           </button>
@@ -151,4 +184,3 @@
       </form>
     </mat-card-content>
   </mat-card>
-  
