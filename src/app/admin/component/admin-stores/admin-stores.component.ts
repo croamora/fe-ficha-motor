@@ -47,7 +47,7 @@ import Swal from 'sweetalert2';
 })
 export class AdminStoresComponent implements OnInit {
 
-  displayedColumns: string[] = ['nombre', 'direccion', 'telefono', 'acciones'];
+  displayedColumns: string[] = ['image', 'nombre', 'direccion', 'telefono', 'acciones'];
   talleres: MatTableDataSource<any>;
   pageIndex: number;
   length: number;

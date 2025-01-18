@@ -90,7 +90,7 @@
                <!-- Latitud -->
                <mat-form-field appearance="outline" class="w-100" color="primary">
                 <mat-label>Latitud</mat-label>
-                <input matInput formControlName="latitud" maxlength="8" />
+                <input matInput formControlName="latitud" />
                 <mat-error *ngIf="tallerForm.get('latitud')?.touched && tallerForm.get('latitud')?.invalid">
                   <span *ngIf="tallerForm.get('latitud')?.hasError('required')">
                     El Latitud es obligatorio.
@@ -101,7 +101,7 @@
                <!-- Latitud -->
                <mat-form-field appearance="outline" class="w-100" color="primary">
                 <mat-label>Longitud</mat-label>
-                <input matInput formControlName="longitud" maxlength="8" />
+                <input matInput formControlName="longitud" />
                 <mat-error *ngIf="tallerForm.get('longitud')?.touched && tallerForm.get('longitud')?.invalid">
                   <span *ngIf="tallerForm.get('longitud')?.hasError('required')">
                     El Longitud es obligatorio.
@@ -155,7 +155,7 @@
   
         <!-- Paso 2: Selección de Categorías -->
         <mat-step>
-          <ng-template matStepLabel>Seleccionar Categorías</ng-template>
+          <ng-template matStepLabel>Categorías</ng-template>
   
           <div class="categorias-container" style="margin-top: 20px;">
             <div class="categorias-column">
@@ -202,9 +202,26 @@
           
         </mat-step>
   
+
+        <!-- Paso 3: publicidad -->
+        <mat-step>
+          <ng-template matStepLabel>Publicidad</ng-template>
+  
+          
+          
+          
+  
+          <div fxLayout="row" fxLayoutAlign="end center" class="stepper-buttons" style="margin-top: 10px;">
+            <button mat-raised-button color="warn" matStepperPrevious>Anterior</button>
+            <button mat-raised-button color="primary" matStepperNext>
+              Siguiente
+            </button>
+          </div>
+          
+        </mat-step>
         
         
-        <!-- Paso 3: Seleccionar Usuarios -->
+        <!-- Paso 4: Seleccionar Usuarios -->
         <mat-step [stepControl]="usuarioForm">
 
           <div class="container">
@@ -220,7 +237,7 @@
           </div>
 
           <form [formGroup]="usuarioForm">
-            <ng-template matStepLabel>Seleccionar Usuarios</ng-template>
+            <ng-template matStepLabel>Usuarios</ng-template>
 
             <!-- Verifica si hay ngModel o formControlName en esta tabla -->
             <table mat-table [dataSource]="usuarios">
