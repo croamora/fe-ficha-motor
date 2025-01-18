@@ -1,7 +1,7 @@
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -23,6 +23,16 @@ import { MarcaService } from 'src/app/services/marca.service';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
 import Swal from 'sweetalert2';
 import { forkJoin } from 'rxjs';
+
+
+function autocompleteObjectValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    if (typeof control.value === 'string') {
+      return { 'invalidAutocompleteObject': { value: control.value } }
+    }
+    return null  /* valid option selected */
+  }
+}
 
 @Component({
   selector: 'app-form-client-cars',
@@ -82,14 +92,22 @@ export class FormClientCarsComponent implements OnInit {
     // Inicializar formulario
     this.carForm = this.fb.group({
       patente: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]{1,6}$/)]],
-      marca: ['', Validators.required],
-      modelo: ['', Validators.required],
+      marca: ['', 
+        { validators: [autocompleteObjectValidator(), Validators.required] }
+      ],
+      modelo: ['', 
+        { validators: [autocompleteObjectValidator(), Validators.required] }
+      ],
       anio: [
         '',
         [Validators.required, Validators.min(1900), Validators.max(this.currentYear)],
       ],
-      tipoVehiculo: ['', Validators.required],
-      tipoCombustible: ['', Validators.required],
+      tipoVehiculo: ['', 
+        { validators: [autocompleteObjectValidator(), Validators.required] }
+      ],
+      tipoCombustible: ['', 
+        { validators: [autocompleteObjectValidator(), Validators.required] }
+      ],
     });
 
     this.carForm.get('patente')!.valueChanges.subscribe((value: string) => {
