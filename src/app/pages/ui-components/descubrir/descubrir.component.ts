@@ -58,6 +58,8 @@ export class DescubrirComponent implements OnInit {
   lat : number;
   lng : number;
   radio : number = 5;
+  hasUbicacion:boolean = false;
+
 
 
   constructor(
@@ -70,41 +72,97 @@ export class DescubrirComponent implements OnInit {
 
   ngOnInit(): void {
     this.palabraClave = "";
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.lat = position.coords.latitude;
-      this.lng = position.coords.longitude;
-      this.radio = 30; 
-      this.callData(); 
-    });
-    
+    this.checkGeolocationPermission();
+   
   }
   
+
+  checkGeolocationPermission(): void {
+    if (!navigator.permissions || !navigator.geolocation) {
+      console.error("Geolocalización no soportada en este navegador");
+      this.hasUbicacion = false;
+      return;
+    }
+  
+    navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+      if (result.state === 'granted') {
+        // Permiso otorgado
+        this.getUbicacion();
+      } else if (result.state === 'prompt') {
+        // Pendiente de solicitar al usuario
+        this.requestUbicacion();
+      } else {
+        // Permiso denegado
+        console.warn("Permiso de geolocalización denegado");
+        this.hasUbicacion = false;
+      }
+    }).catch((error) => {
+      console.error("Error al consultar permisos de geolocalización:", error);
+      this.hasUbicacion = false;
+    });
+  }
+
+
+  getUbicacion(): void {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.lat = position.coords.latitude;
+        this.lng = position.coords.longitude;
+        this.radio = 30; 
+        this.hasUbicacion = true;
+        this.callData(); 
+      },
+      (error) => {
+        console.error("Error al obtener la ubicación:", error);
+        this.hasUbicacion = false;
+      }
+    );
+  }
+  
+  requestUbicacion(): void {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.lat = position.coords.latitude;
+        this.lng = position.coords.longitude;
+        this.radio = 30; 
+        this.hasUbicacion = true;
+        this.callData(); 
+      },
+      (error) => {
+        console.error("Error al obtener la ubicación o permiso denegado:", error);
+        this.hasUbicacion = false;
+      }
+    );
+  }
+
 
   public getServerData(event:PageEvent){
     this.callData(event);
   }
 
   public callData(event?:PageEvent){
-
-    let pageNum = event != null ? (event.pageIndex + 1) : 1;
-    let pageSize = event != null ? event.pageSize : 12;
-    this.spinner.show();
-    this.tallerService.getTalleresPorGeo(pageNum, pageSize, this.palabraClave, this.lat , this.lng , this.radio).subscribe({
-      next: (response) => {
-        this.spinner.hide();
-        this.pageIndex = (response.pageNum - 1);
-        this.length = response.total;
-        this.talleres = response.list;
-      },
-      error: (err) => {
-        this.spinner.hide();
-        console.error('Error al cargar los talleres:', err);
-      },
-    });
+    if(this.hasUbicacion){
+      let pageNum = event != null ? (event.pageIndex + 1) : 1;
+      let pageSize = event != null ? event.pageSize : 12;
+      this.spinner.show();
+      this.tallerService.getTalleresPorGeo(pageNum, pageSize, this.palabraClave, this.lat , this.lng , this.radio).subscribe({
+        next: (response) => {
+          this.spinner.hide();
+          this.pageIndex = (response.pageNum - 1);
+          this.length = response.total;
+          this.talleres = response.list;
+        },
+        error: (err) => {
+          this.spinner.hide();
+          console.error('Error al cargar los talleres:', err);
+        },
+      });
+    }
+    
   }
 
   navigateTo(epresaId: number): void {
-    this.router.navigate([`/descubrir/detalle-empresa/${epresaId}`]);
+    this.router.navigate([`/locales/detalle-empresa/${epresaId}`]);
   }
 
 

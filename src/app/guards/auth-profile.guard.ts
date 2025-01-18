@@ -30,7 +30,7 @@ export class ProfileGuard implements CanActivate {
       }
     } else {
         // Si no hay perfil, redirigir al login o a una ruta por defecto
-        this.router.navigate(['/descubrir']);
+        this.router.navigate(['/locales']);
         return false;
     }
 

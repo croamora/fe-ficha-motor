@@ -108,7 +108,7 @@ export class AppSideLoginComponent implements OnInit {
         
         break;
       default:
-        this.router.navigate(['/descubrir']);
+        this.router.navigate(['/locales']);
         break;
     }
   }

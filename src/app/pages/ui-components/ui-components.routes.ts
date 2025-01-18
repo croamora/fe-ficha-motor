@@ -43,7 +43,7 @@ export const UiComponentsRoutes: Routes = [
         component: AppTablesComponent,
       },
       {
-        path: 'descubrir',
+        path: 'locales',
         component: DescubrirComponent,
       },
       

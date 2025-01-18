@@ -11,7 +11,7 @@ export const routes: Routes = [
       
       {
         path: '',
-        redirectTo: '/descubrir',
+        redirectTo: '/locales',
         pathMatch: 'full',
       },
       {
@@ -23,7 +23,7 @@ export const routes: Routes = [
       },
       
       {
-        path: 'descubrir',
+        path: 'locales',
         loadChildren: () =>
           import('./pages/pages.routes').then((m) => m.PagesRoutes),
       },

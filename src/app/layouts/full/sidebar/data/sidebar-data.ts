@@ -5,10 +5,10 @@ export const navItems: NavItem[] = [
     navCap: 'Menú',
   },
   {
-    displayName: 'Descubrir',
+    displayName: 'Locales',
     iconName: 'layout-dashboard',
     bgcolor: 'error',
-    route: '/descubrir',
+    route: '/locales',
   },
   
   // {
