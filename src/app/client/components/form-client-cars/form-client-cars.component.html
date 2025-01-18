@@ -115,54 +115,36 @@
                 <mat-label>Tipo de Vehículo</mat-label>
                 <input
                   matInput
-                  [matAutocomplete]="tipoVehiculo"
+                  [matAutocomplete]="tipoVehiculoAC"
                   formControlName="tipoVehiculo"
                   [value]="selectedVehicleType ? selectedVehicleType.vehicleTypeName : ''"
+                  (input)="onTipoVehiculoInput($event)"
                 />
-                <mat-autocomplete #tipoVehiculo="matAutocomplete" (optionSelected)="onTipoVehiculoChange($event.option.value)" >
-                  <mat-option *ngFor="let vehicleType of vehicleTypeList" [value]="vehicleType">
+                <mat-autocomplete #tipoVehiculoAC="matAutocomplete" (optionSelected)="onTipoVehiculoChange($event.option.value)" >
+                  <mat-option *ngFor="let vehicleType of (tipoVehiculoFiltrados | async)" [value]="vehicleType">
                     {{ vehicleType.vehicleTypeName }}
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
-
-<!-- 
-              <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Tipo de Vehículo</mat-label>
-                <mat-select formControlName="tipoVehiculo">
-                  <mat-option *ngFor="let vehicleType of vehicleTypeList" [value]="vehicleType">
-                    {{ vehicleType.vehicleTypeName }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field> -->
-
 
                <!-- tipo Combustible -->
               <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Tipo de Combustible</mat-label>
                 <input
                   matInput
-                  [matAutocomplete]="tipoCombustible"
+                  [matAutocomplete]="tipoCombustibleAC"
                   formControlName="tipoCombustible"
                   [value]="selectedCombustibleType ? selectedCombustibleType.combustibleName : ''"
+                  (input)="onTipoCombustibleInput($event)"
                 />
-                <mat-autocomplete #tipoCombustible="matAutocomplete" (optionSelected)="onTipoCombustibleChange($event.option.value)" >
-                  <mat-option *ngFor="let combustibleType of combustibleTypeList" [value]="combustibleType">
+                <mat-autocomplete #tipoCombustibleAC="matAutocomplete" (optionSelected)="onTipoCombustibleChange($event.option.value)" >
+                  <mat-option *ngFor="let combustibleType of (tipoCombustibleFiltrados | async)" [value]="combustibleType">
                     {{ combustibleType.combustibleName }}
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
 
 
-              
-               <!-- <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Tipo de Combustible</mat-label>
-                <mat-select formControlName="tipoCombustible">
-                  <mat-option *ngFor="let combustibleType of combustibleTypeList" [value]="combustibleType">
-                    {{ combustibleType.combustibleName }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field> -->
 
 
           <!-- Campo de Año -->

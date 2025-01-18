@@ -52,6 +52,8 @@ export class FormClientCarsComponent implements OnInit {
   carForm!: FormGroup;
   marcasFiltradas!: Observable<any[]>;
   modelosFiltrados!: Observable<any[]>;
+  tipoVehiculoFiltrados!: Observable<any[]>;
+  tipoCombustibleFiltrados!: Observable<any[]>;
   modelos: any[] = [];
   combustibleTypeList: any[] = [];
   vehicleTypeList: any[] = [];
@@ -111,8 +113,19 @@ export class FormClientCarsComponent implements OnInit {
       switchMap((value) => this.filterModelos(value || ''))
     );
 
-   
+    this.tipoVehiculoFiltrados= this.carForm.get('tipoVehiculo')!.valueChanges.pipe(
+      startWith(''),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((value) => this.filterVehicleTipo(value || ''))
+    );
 
+    this.tipoCombustibleFiltrados= this.carForm.get('tipoCombustible')!.valueChanges.pipe(
+      startWith(''),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((value) => this.filterCombustibleTipo(value || ''))
+    );
 
   }
 
@@ -227,6 +240,20 @@ export class FormClientCarsComponent implements OnInit {
     }
   }
 
+  onTipoVehiculoInput(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    if (input) {
+      this.tipoVehiculoFiltrados = this.filterVehicleTipo(input.value);
+    }
+  }
+
+  onTipoCombustibleInput(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    if (input) {
+      this.tipoCombustibleFiltrados = this.filterCombustibleTipo(input.value);
+    }
+  }
+
   // Filtrar modelos al escribir
   private filterModelos(query: string): Observable<any[]> {
     if (!query.trim()) {
@@ -236,6 +263,32 @@ export class FormClientCarsComponent implements OnInit {
       map((modelos) =>
         modelos.filter((modelo) =>
           modelo.modelo.toLowerCase().includes(query.toLowerCase())
+        )
+      )
+    );
+  }
+
+  private filterVehicleTipo(query: string): Observable<any[]> {
+    if (!query.trim()) {
+      return of(this.vehicleTypeList);
+    }
+    return of(this.vehicleTypeList).pipe(
+      map((vehicleType) =>
+        vehicleType.filter((type) =>
+          type.vehicleTypeName.toLowerCase().includes(query.toLowerCase())
+        )
+      )
+    );
+  }
+
+  private filterCombustibleTipo(query: string): Observable<any[]> {
+    if (!query.trim()) {
+      return of(this.combustibleTypeList);
+    }
+    return of(this.combustibleTypeList).pipe(
+      map((combustibleType) =>
+        combustibleType.filter((type) =>
+          type.combustibleName.toLowerCase().includes(query.toLowerCase())
         )
       )
     );
