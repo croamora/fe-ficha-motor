@@ -119,6 +119,7 @@
                   formControlName="tipoVehiculo"
                   [value]="selectedVehicleType ? selectedVehicleType.vehicleTypeName : ''"
                   (input)="onTipoVehiculoInput($event)"
+                  (focus)="onTipoVehiculoInput($event)"
                 />
                 <mat-autocomplete #tipoVehiculoAC="matAutocomplete" (optionSelected)="onTipoVehiculoChange($event.option.value)" >
                   <mat-option *ngFor="let vehicleType of (tipoVehiculoFiltrados | async)" [value]="vehicleType">
@@ -136,6 +137,7 @@
                   formControlName="tipoCombustible"
                   [value]="selectedCombustibleType ? selectedCombustibleType.combustibleName : ''"
                   (input)="onTipoCombustibleInput($event)"
+                  (focus)="onTipoCombustibleInput($event)"
                 />
                 <mat-autocomplete #tipoCombustibleAC="matAutocomplete" (optionSelected)="onTipoCombustibleChange($event.option.value)" >
                   <mat-option *ngFor="let combustibleType of (tipoCombustibleFiltrados | async)" [value]="combustibleType">

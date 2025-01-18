@@ -243,6 +243,7 @@ export class FormClientCarsComponent implements OnInit {
   onTipoVehiculoInput(event: Event): void {
     const input = event.target as HTMLInputElement | null;
     if (input) {
+      input.focus();
       this.tipoVehiculoFiltrados = this.filterVehicleTipo(input.value);
     }
   }
@@ -250,6 +251,7 @@ export class FormClientCarsComponent implements OnInit {
   onTipoCombustibleInput(event: Event): void {
     const input = event.target as HTMLInputElement | null;
     if (input) {
+      input.focus();
       this.tipoCombustibleFiltrados = this.filterCombustibleTipo(input.value);
     }
   }
