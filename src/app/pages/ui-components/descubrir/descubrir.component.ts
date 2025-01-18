@@ -74,8 +74,9 @@ export class DescubrirComponent implements OnInit {
       this.lat = position.coords.latitude;
       this.lng = position.coords.longitude;
       this.radio = 30; 
+      this.callData(); 
     });
-    this.callData(); 
+    
   }
   
 
@@ -88,7 +89,7 @@ export class DescubrirComponent implements OnInit {
     let pageNum = event != null ? (event.pageIndex + 1) : 1;
     let pageSize = event != null ? event.pageSize : 12;
     this.spinner.show();
-    this.tallerService.getTalleresPorGeo(pageNum, pageSize, this.palabraClave, this.lat ?? null, this.lng ?? null, this.radio).subscribe({
+    this.tallerService.getTalleresPorGeo(pageNum, pageSize, this.palabraClave, this.lat , this.lng , this.radio).subscribe({
       next: (response) => {
         this.spinner.hide();
         this.pageIndex = (response.pageNum - 1);
