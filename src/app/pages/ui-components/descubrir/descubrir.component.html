@@ -41,7 +41,12 @@
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
                                         <h6 class="mat-body-2 f-w-600"> <i-tabler name="map-pin" class="icon-16"></i-tabler> {{ taller.direccion }}</h6>
-                                        <!-- <span class="f-s-14 m-l-4 text-decoration-line-through">${{ productcard.rprice }}</span> -->
+                                        
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between" *ngIf="taller.distancia">
+                                    <div class="d-flex align-items-center">
+                                        <h6 class="mat-body-2 f-w-400"> {{ taller.distancia }} km de distancia</h6>
                                     </div>
                                 </div>
                             </mat-card-content>

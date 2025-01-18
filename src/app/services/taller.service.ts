@@ -27,6 +27,19 @@ export class TallerService {
     }
 
 
+    getTalleresPorGeo(pageNum: number, pageSize: number, palabraClave: string, latitud: number, longitud: number, radio: number) : Observable<PaginationModel>{
+        let finalurl = this.apiUrl + '/userFilter?pageNum='+pageNum+'&pageSize='+pageSize+'&palabraClave='+ palabraClave 
+        if(latitud){
+            finalurl = finalurl + '&latitud=' + latitud
+        }
+        if(latitud){
+            finalurl = finalurl + '&longitud=' + longitud +'&radio=' + radio
+        }
+        return this.http.get<PaginationModel>(finalurl, { withCredentials: true });
+    }
+    
+
+
     getTalleresById(idTaller: string) : Observable<any> {
         return this.http.get<PaginationModel>(this.apiUrl + '/' + idTaller, { withCredentials: true });
     }
