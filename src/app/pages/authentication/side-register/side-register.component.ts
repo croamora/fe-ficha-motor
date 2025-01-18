@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ClientUser } from 'src/app/models/clientUser-model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-side-register',
@@ -44,7 +45,8 @@ export class AppSideRegisterComponent {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private snackBar: MatSnackBar,
 
   ) {}
 
@@ -70,17 +72,30 @@ export class AppSideRegisterComponent {
       this.spinner.show();
       this.authService.saveClientUser(newUser).subscribe({
         next: (data) => {
-          this.spinner.hide();
-          this.router.navigate(['/authentication/login']);
+
+          //this.router.navigate(['/authentication/login']);
+          this.authService.login(this.form.value.email ?? '', this.form.value.password ?? '').subscribe({
+            next: (response) => {
+              this.spinner.hide();
+              this.authService.saveToken(response.token);
+              this.router.navigate(['/client/cars/form']);
+            },
+            error: (err) => {
+              this.spinner.hide();
+              this.snackBar.open('Credenciales Invalidas.', 'Cerrar', { duration: 3000 });
+              console.error('credenciales invalidas:', err);
+            },
+          });
+
         },
         error: (err) => {
           this.spinner.hide();
-          this.router.navigate(['/authentication/login']);
           console.error('Error al Registrar el usuario:', err);
         }
       });
     }
   }
+
 
   togglePassword1Visibility(): void {
     this.hidePassword1 = !this.hidePassword1;

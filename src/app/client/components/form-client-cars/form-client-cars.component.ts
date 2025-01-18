@@ -18,6 +18,7 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
+import { DataService } from 'src/app/services/data.service';
 import { MarcaService } from 'src/app/services/marca.service';
 import { VehiculoService } from 'src/app/services/vehiculo.service';
 import Swal from 'sweetalert2';
@@ -51,6 +52,8 @@ export class FormClientCarsComponent implements OnInit {
   marcasFiltradas!: Observable<any[]>;
   modelosFiltrados!: Observable<any[]>;
   modelos: any[] = [];
+  combustibleTypeList: any[] = [];
+  vehicleTypeList: any[] = [];
   carExists: boolean = true;
   currentYear: number = new Date().getFullYear();
   patentePreview: string = '';
@@ -64,6 +67,7 @@ export class FormClientCarsComponent implements OnInit {
     private marcaService: MarcaService,
     private spinner: NgxSpinnerService,
     private snackBar: MatSnackBar,
+    private dataService: DataService,
   ) {}
 
   ngOnInit(): void {
@@ -77,6 +81,8 @@ export class FormClientCarsComponent implements OnInit {
         '',
         [Validators.required, Validators.min(1900), Validators.max(this.currentYear)],
       ],
+      tipoVehiculo: ['', Validators.required],
+      tipoCombustible: ['', Validators.required],
     });
 
     this.carForm.get('patente')!.valueChanges.subscribe((value: string) => {
@@ -99,6 +105,30 @@ export class FormClientCarsComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((value) => this.filterModelos(value || ''))
     );
+
+    this.loadData();
+
+
+  }
+
+  loadData(){
+    this.dataService.getAllCombustibleType().subscribe({
+      next: (response) => {
+        this.combustibleTypeList = response;
+      },
+      error: (err) => {
+        console.error('Error al cargar los tipos de combustible:', err);
+      },
+    });
+
+    this.dataService.getAllVehicleType().subscribe({
+      next: (response) => {
+        this.vehicleTypeList = response;
+      },
+      error: (err) => {
+        console.error('Error al cargar los tipos de vehículo:', err);
+      },
+    });
   }
 
   checkPatente(): void {
@@ -118,7 +148,7 @@ export class FormClientCarsComponent implements OnInit {
           this.carForm.get('modelo')?.enable();
           this.carForm.get('anio')?.enable();
         }
-        this.carForm.get('patente')?.disable();
+        this.carForm.get('patente')?.disable({ emitEvent: false });
       },
       error: (err) => { 
         console.error(err)
@@ -236,7 +266,18 @@ export class FormClientCarsComponent implements OnInit {
 
   onSubmit(): void {
     if (this.carForm.valid) {
-      const newVehiculo = this.carForm.value;
+      const rawVehiculo = this.carForm.getRawValue();
+
+      const newVehiculo = {
+        ...rawVehiculo, // Copia el resto de las propiedades
+        tipo_vehiculo: rawVehiculo.tipoVehiculo, // Renombra tipoVehiculo a tipo_vehiculo
+        tipo_combustible: rawVehiculo.tipoCombustible, // Renombra tipoCombustible a tipo_combustible
+      };
+
+      // Elimina las propiedades originales si no las necesitas
+      delete newVehiculo.tipoVehiculo;
+      delete newVehiculo.tipoCombustible;
+      
       this.spinner.show();
       this.vehiculoService.save(newVehiculo).subscribe({
         next: (result) => {

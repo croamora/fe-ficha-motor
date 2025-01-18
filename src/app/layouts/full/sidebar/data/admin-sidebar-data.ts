@@ -8,25 +8,25 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Dashboard',
     iconName: 'layout-dashboard',
-    bgcolor: 'primary',
+    bgcolor: 'error',
     route: '/admin',
   },
   {
     displayName: 'Talleres',
     iconName: 'building-store',
-    bgcolor: 'primary',
+    bgcolor: 'error',
     route: '/admin/stores',
   },
   {
     displayName: 'Marcas',
     iconName: 'brand-toyota',
-    bgcolor: 'primary',
+    bgcolor: 'error',
     route: '/admin/brands',
   },
   {
     displayName: 'Usuarios',
     iconName: 'users',
-    bgcolor: 'primary',
+    bgcolor: 'error',
     route: '/admin/users',
   },
   

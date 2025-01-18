@@ -1,15 +1,21 @@
 <mat-card class="cardWithShadow theme-card" style="margin-bottom: 10px;">
-    <mat-card-header >
-      <button 
-        mat-flat-button 
-        color="primary" 
-        (click)="volver()"
-      >
-        <i-tabler class="custom-icon" name="arrow-left"></i-tabler>
-        <span class="button-text">Volver</span>
-      </button>
-    </mat-card-header>
-  </mat-card>
+  <mat-card-header class="header-container">
+    <button 
+      mat-flat-button 
+      color="primary" 
+      (click)="volver()"
+      class="volver-button"
+    >
+      <i-tabler class="custom-icon" name="arrow-left"></i-tabler>
+      <span class="button-text">Volver</span>
+    </button>
+
+    <mat-card-title class="m-b-0 title-text">
+      Registrar Vehículo
+    </mat-card-title>
+  </mat-card-header>
+</mat-card>
+
   
   <mat-card class="cardWithShadow theme-card" style="margin-bottom: 10px;">
     <mat-card-content>
@@ -103,6 +109,28 @@
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
+
+              <!-- tipo Vehiculo -->
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Tipo de Vehículo</mat-label>
+                <mat-select formControlName="tipoVehiculo">
+                  <mat-option *ngFor="let vehicleType of vehicleTypeList" [value]="vehicleType">
+                    {{ vehicleType.vehicleTypeName }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+
+               <!-- tipo Vehiculo -->
+               <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Tipo de Combustible</mat-label>
+                <mat-select formControlName="tipoCombustible">
+                  <mat-option *ngFor="let combustibleType of combustibleTypeList" [value]="combustibleType">
+                    {{ combustibleType.combustibleName }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              
               
           <!-- Campo de Año -->
           <mat-form-field appearance="fill" class="full-width">

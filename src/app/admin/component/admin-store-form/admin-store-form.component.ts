@@ -104,6 +104,8 @@ export class AdminStoreFormComponent implements OnInit {
       img: [null, Validators.required],
       imgProfile: [null, Validators.required],
       descripcion: [''],
+      latitud: ['', Validators.required],
+      longitud: ['', Validators.required],
       idRegion: [null, Validators.required],
       idComuna: [null, Validators.required],
     });
@@ -136,6 +138,8 @@ export class AdminStoreFormComponent implements OnInit {
           img: null, // No puedes asignar archivos directamente, manejarás esto con la vista.
           imgProfile: null,
           descripcion: tallerData.taller.descripcion,
+          latitud: tallerData.taller.latitud,
+          longitud: tallerData.taller.longitud,
           idRegion: tallerData.taller.region.id,
           idComuna: tallerData.taller.comuna.id,
         });
@@ -295,6 +299,8 @@ export class AdminStoreFormComponent implements OnInit {
         telefono: tallerData.telefono,
         descripcion: tallerData.descripcion,
         idComuna: tallerData.idComuna,
+        latitud: tallerData.latitud,
+        longitud: tallerData.longitud,
       }));
   
       // Comprobación explícita para las imágenes

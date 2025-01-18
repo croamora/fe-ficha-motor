@@ -7,7 +7,7 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Descubrir',
     iconName: 'layout-dashboard',
-    bgcolor: 'primary',
+    bgcolor: 'error',
     route: '/descubrir',
   },
   

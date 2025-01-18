@@ -1,0 +1,11 @@
+.background-image {
+    background-image: url('../../../assets/images/backgrounds/image.png');
+    background-size: 150px; /* Tamaño de cada imagen */
+    background-repeat: repeat; /* Repetir las imágenes */
+    background-position: 0 0; /* Inicia desde la esquina superior izquierda */
+  }
+  
+  .background-image:nth-child(odd) {
+    background-position: -75px 0; /* Desplazar las filas impares */
+  }
+  

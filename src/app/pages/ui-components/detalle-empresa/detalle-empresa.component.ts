@@ -42,7 +42,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 export class DetalleEmpresaComponent implements OnInit {
   idTaller: string = '';
   taller: any;
-  map!: google.maps.Map;
+  //map!: google.maps.Map;
 
   constructor(
     private http: HttpClient,
@@ -65,7 +65,7 @@ export class DetalleEmpresaComponent implements OnInit {
     this.tallerService.getTalleresById(this.idTaller).subscribe({
       next: (data) => {
         this.taller = data;
-        this.loadMap(); // Cargar el mapa una vez que se obtienen los datos del taller
+        //this.loadMap(); // Cargar el mapa una vez que se obtienen los datos del taller
         this.spinner.hide();
       },
       error: (err) => {
@@ -75,51 +75,51 @@ export class DetalleEmpresaComponent implements OnInit {
     });
   }
 
-  loadMap(): void {
-    const loader = new Loader({
-      apiKey: 'AIzaSyBlFzeDeDjUYYUZtDoShCemxMJx8Q8Usdk', // Reemplaza con tu clave de API
-      version: 'weekly',
-      libraries: ['marker'], // Incluye librerías necesarias
-    });
+  // loadMap(): void {
+  //   const loader = new Loader({
+  //     apiKey: 'AIzaSyBlFzeDeDjUYYUZtDoShCemxMJx8Q8Usdk', // Reemplaza con tu clave de API
+  //     version: 'weekly',
+  //     libraries: ['marker'], // Incluye librerías necesarias
+  //   });
 
-    loader.load().then(() => {
-      const mapDiv = document.getElementById('map');
-      if (!mapDiv) {
-        console.error('Contenedor de mapa no encontrado.');
-        return;
-      }
+  //   loader.load().then(() => {
+  //     const mapDiv = document.getElementById('map');
+  //     if (!mapDiv) {
+  //       console.error('Contenedor de mapa no encontrado.');
+  //       return;
+  //     }
 
-      this.map = new google.maps.Map(mapDiv, {
-        center: { lat: 0, lng: 0 }, // Coordenadas por defecto
-        zoom: 15,
-        mapId: 'TU_MAP_ID', // Reemplaza con tu Map ID
-      });
+  //     this.map = new google.maps.Map(mapDiv, {
+  //       center: { lat: 0, lng: 0 }, // Coordenadas por defecto
+  //       zoom: 15,
+  //       mapId: 'TU_MAP_ID', // Reemplaza con tu Map ID
+  //     });
 
-      // Geocodificar la dirección del taller
-      this.geocodeAddress(this.taller.direccion);
-    });
-  }
+  //     // Geocodificar la dirección del taller
+  //     this.geocodeAddress(this.taller.direccion);
+  //   });
+  // }
 
-  geocodeAddress(address: string): void {
-    const geocoder = new google.maps.Geocoder();
-    const normalizedAddress = this.normalizeAddress(address);
+  // geocodeAddress(address: string): void {
+  //   const geocoder = new google.maps.Geocoder();
+  //   const normalizedAddress = this.normalizeAddress(address);
 
-    geocoder.geocode({ address: normalizedAddress }, (results, status) => {
-      if (status === 'OK' && results && results.length > 0) {
-        const location = results[0].geometry.location;
-        this.map.setCenter(location);
+  //   geocoder.geocode({ address: normalizedAddress }, (results, status) => {
+  //     if (status === 'OK' && results && results.length > 0) {
+  //       const location = results[0].geometry.location;
+  //       this.map.setCenter(location);
 
-        // Agregar marcador avanzado
-        new google.maps.marker.AdvancedMarkerElement({
-          map: this.map,
-          position: location,
-          title: this.taller.title || 'Ubicación del taller',
-        });
-      } else {
-        console.error('Geocoding fallido:', status);
-      }
-    });
-  }
+  //       // Agregar marcador avanzado
+  //       new google.maps.marker.AdvancedMarkerElement({
+  //         map: this.map,
+  //         position: location,
+  //         title: this.taller.title || 'Ubicación del taller',
+  //       });
+  //     } else {
+  //       console.error('Geocoding fallido:', status);
+  //     }
+  //   });
+  // }
 
   normalizeAddress(address: string): string {
     return address.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Elimina tildes y caracteres especiales

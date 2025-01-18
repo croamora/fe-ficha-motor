@@ -55,6 +55,10 @@ export class DescubrirComponent implements OnInit {
   length:number;
   palabraClave: string;
   talleres: any[] = [];
+  lat : number;
+  lng : number;
+  radio : number = 5;
+
 
   constructor(
     private router: Router,
@@ -66,6 +70,11 @@ export class DescubrirComponent implements OnInit {
 
   ngOnInit(): void {
     this.palabraClave = "";
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.lat = position.coords.latitude;
+      this.lng = position.coords.longitude;
+      this.radio = 5; 
+    });
     this.callData(); 
   }
   
@@ -75,6 +84,11 @@ export class DescubrirComponent implements OnInit {
   }
 
   public callData(event?:PageEvent){
+
+    console.log("lat: " + this.lat);
+    console.log("lng: " + this.lng);
+    console.log("radio: " + this.radio);
+
     let pageNum = event != null ? (event.pageIndex + 1) : 1;
     let pageSize = event != null ? event.pageSize : 12;
     this.spinner.show();

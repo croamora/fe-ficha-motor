@@ -79,3 +79,17 @@
     padding-bottom: 20px; /* Opcional: añade padding para espacio adicional */
   }
   
+
+  .header-container {
+    display: flex;
+    align-items: center; /* Alinear verticalmente */
+  }
+  
+  .volver-button {
+    order: -1; /* Mover el botón antes del título */
+    margin-right: 10px; /* Añadir espacio entre el botón y el título */
+  }
+  
+  .title-text {
+    order: 0; /* El título mantiene su posición por defecto */
+  }

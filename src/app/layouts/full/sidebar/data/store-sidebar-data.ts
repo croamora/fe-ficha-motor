@@ -7,32 +7,32 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Mi Negocio',
     iconName: 'building-store',
-    bgcolor: 'primary',
+    bgcolor: 'error',
     route: '/store',
   },
   {
     displayName: 'Cotizaciones',
     iconName: 'file-dollar',
-    bgcolor: 'primary',
+    bgcolor: 'error',
     route: '/store/cotizations',
   },
   {
     displayName: 'Ordenes de Trabajo',
     iconName: 'checkup-list',
-    bgcolor: 'primary',
+    bgcolor: 'error',
     route: '/store/orders',
   },
   {
     displayName: 'Agenda',
     iconName: 'calendar-time',
-    bgcolor: 'primary',
+    bgcolor: 'error',
     route: '/store/schedule',
   },
   
   {
     displayName: 'Configuraciones',
     iconName: 'settings-cog',
-    bgcolor: 'primary',
+    bgcolor: 'error',
     children: [
       {
         displayName: 'Usuarios',

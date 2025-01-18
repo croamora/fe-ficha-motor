@@ -81,12 +81,21 @@
   }
 
   .container {
-    padding: 16px;
     width: 100%;
-    
   }
 
 
   mat-form-field {
     width: 50%;
   }
+
+
+  @media only screen and (max-device-width : 480px) {
+  
+    mat-form-field {
+      width: 200px;
+    }
+
+  }
+  
+ 

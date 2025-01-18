@@ -86,6 +86,28 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
+
+               <!-- Latitud -->
+               <mat-form-field appearance="outline" class="w-100" color="primary">
+                <mat-label>Latitud</mat-label>
+                <input matInput formControlName="latitud" maxlength="8" />
+                <mat-error *ngIf="tallerForm.get('latitud')?.touched && tallerForm.get('latitud')?.invalid">
+                  <span *ngIf="tallerForm.get('latitud')?.hasError('required')">
+                    El Latitud es obligatorio.
+                  </span>
+                </mat-error>
+              </mat-form-field>
+
+               <!-- Latitud -->
+               <mat-form-field appearance="outline" class="w-100" color="primary">
+                <mat-label>Longitud</mat-label>
+                <input matInput formControlName="longitud" maxlength="8" />
+                <mat-error *ngIf="tallerForm.get('longitud')?.touched && tallerForm.get('longitud')?.invalid">
+                  <span *ngIf="tallerForm.get('longitud')?.hasError('required')">
+                    El Longitud es obligatorio.
+                  </span>
+                </mat-error>
+              </mat-form-field>
               
               <!-- Descripción -->
               <mat-form-field appearance="outline" class="w-100" color="primary">

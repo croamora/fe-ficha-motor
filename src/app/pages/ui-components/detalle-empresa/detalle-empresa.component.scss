@@ -96,21 +96,21 @@
   
   /* Estilo específico para el botón de Google Maps */
   .maps-button {
-    background-color: #4285f4; /* Azul de Google */
+    background-color: #1B1C55; /* Azul de Google */
     color: white;
   
     &:hover {
-      background-color: #3367d6;
+      background-color: rgba(51, 103, 214, 0.582);
     }
   }
   
   /* Estilo específico para el botón de WhatsApp */
   .whatsapp-button {
-    background-color: #25d366; /* Verde de WhatsApp */
+    background-color: #EC600B; /* Verde de WhatsApp */
     color: white;
   
     &:hover {
-      background-color: #1da851;
+      background-color: #ec610b88;
     }
   }
   

@@ -6,13 +6,13 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Descubrir',
     iconName: 'layout-dashboard',
-    bgcolor: 'primary',
+    bgcolor: 'error',
     route: '/descubrir',
   },
   {
     displayName: 'Mis Vehículos',
     iconName: 'car',
-    bgcolor: 'primary',
+    bgcolor: 'error',
     route: '/client/cars',
   },
   // {
