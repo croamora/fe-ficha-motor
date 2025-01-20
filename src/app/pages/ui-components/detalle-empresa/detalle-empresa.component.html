@@ -2,21 +2,21 @@
     <mat-card-header class="card-header" style="padding: 0px;">
       <!-- Imagen del banner -->
       <div class="banner-container">
-        <img src="{{ taller.img }}" alt="Banner Image" class="banner-img" />
+        <img src="{{taller?.img}}" alt="Banner Image" class="banner-img" />
       </div>
       <!-- Imagen de perfil -->
       <div class="profile-container">
-        <img [src]="taller.imgProfile" alt="Profile Image" class="profile-img" />
+        <img [src]="taller?.imgProfile" alt="Profile Image" class="profile-img" />
       </div>
     </mat-card-header>
   
     <mat-card-content class="b-t-1">
       <div class="row">
         <div class="col-md-12 text-center">
-          <h3>{{ taller.nombre }}</h3>
-          <p>{{ taller.direccion }}</p>
+          <h3>{{ taller?.nombre }}</h3>
+          <p>{{ taller?.direccion }}</p>
 
-          <h4>{{ taller.descripcion }}</h4>
+          <h4>{{ taller?.descripcion }}</h4>
 
         </div>
       </div>
@@ -39,6 +39,25 @@
        
       <!-- Mapa de Google Maps
       <div id="map" style="height: 400px; width: 100%;margin-top: 30px;"></div> -->
+
+
+       <!-- Carrusel de Imágenes -->
+
+      <div *ngIf="taller?.banners && taller?.banners.length > 0; else loading">
+        <owl-carousel-o [options]="carouselOptions">
+          <ng-container *ngFor="let image of taller?.banners">
+            <ng-template carouselSlide>
+              <mat-card>
+                <img [src]="image.img" alt="Image" class="carousel-image" />
+              </mat-card>
+            </ng-template>
+          </ng-container>
+        </owl-carousel-o>
+      </div>
+
+      <ng-template #loading>
+        <p>Loading images...</p>
+      </ng-template>
 
     </mat-card-content>
   </mat-card>

@@ -70,6 +70,7 @@
     justify-content: center; /* Centrar los botones horizontalmente */
     gap: 15px; /* Separación entre botones */
     margin-top: 20px; /* Espaciado superior */
+    margin-bottom: 30px;
   }
   
   .custom-button {
@@ -112,5 +113,25 @@
     &:hover {
       background-color: #ec610b88;
     }
+  }
+
+
+  .carousel-image {
+    max-width: 100%;
+    max-height: 400px; /* Ajusta este tamaño según tu diseño */
+    object-fit: cover; /* Para mantener proporción */
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .owl-carousel {
+    width: 100%;
+    height: auto;
+    overflow: hidden; /* Evita contenido que se desborde */
+  }
+  
+  .owl-stage {
+    display: flex;
+    align-items: center;
   }
   

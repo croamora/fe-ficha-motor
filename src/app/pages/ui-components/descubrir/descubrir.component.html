@@ -35,6 +35,13 @@
                 <div *ngIf="!hasUbicacion" class="container" style="text-align: center;">
                     <div >
                         <h4 style="margin-top: 0px;color: #FF6319;"> Está App requiere de su localización para funcionar correctamente!</h4>
+                        <button mat-flat-button color="primary" (click)="checkGeolocationPermissionAndLoadData()">
+                            Solicitar ubicación
+                          </button>
+                          
+                          <div *ngIf="!hasUbicacion" class="help-text">
+                            Los permisos de geolocalización están deshabilitados. Por favor, habilítalos desde la configuración del navegador.
+                          </div>
                     </div>
                 </div>
                 

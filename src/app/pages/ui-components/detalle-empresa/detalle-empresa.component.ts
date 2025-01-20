@@ -16,6 +16,9 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { TallerService } from 'src/app/services/taller.service';
 import { Loader } from '@googlemaps/js-api-loader';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 
 @Component({
   selector: 'app-detalle-empresa',
@@ -35,6 +38,7 @@ import { Loader } from '@googlemaps/js-api-loader';
     MatCheckboxModule,
     TablerIconsModule,
     NgxSpinnerModule,
+    CarouselModule 
   ],
   templateUrl: './detalle-empresa.component.html',
   styleUrls: ['./detalle-empresa.component.scss'],
@@ -42,6 +46,29 @@ import { Loader } from '@googlemaps/js-api-loader';
 export class DetalleEmpresaComponent implements OnInit {
   idTaller: string = '';
   taller: any;
+
+  carouselOptions: OwlOptions = {
+    loop: true,
+    autoplay:true,
+    mouseDrag: true,
+    touchDrag: true,
+    margin: 10,
+    nav: true,
+    dots: true,
+    animateOut: 'fadeOut',
+    navText: ['Anterior', 'Siguiente'],
+    responsive: {
+      0: {
+        items: 1
+      },
+      600: {
+        items: 1
+      },
+      1000: {
+        items: 1
+      }
+    }
+  };
   //map!: google.maps.Map;
 
   constructor(
@@ -62,18 +89,22 @@ export class DetalleEmpresaComponent implements OnInit {
 
   getTallerDetail(idTaller: string): void {
     this.spinner.show();
-    this.tallerService.getTalleresById(this.idTaller).subscribe({
-      next: (data) => {
-        this.taller = data;
-        //this.loadMap(); // Cargar el mapa una vez que se obtienen los datos del taller
-        this.spinner.hide();
-      },
-      error: (err) => {
-        console.error('Error al obtener datos del taller:', err);
-        this.spinner.hide();
-      },
-    });
+
+      this.tallerService.getTalleresById(this.idTaller).subscribe({
+        next: (data) => {
+          this.taller = data;
+          //this.loadMap(); // Cargar el mapa una vez que se obtienen los datos del taller
+          this.spinner.hide();
+        },
+        error: (err) => {
+          console.error('Error al obtener datos del taller:', err);
+          this.spinner.hide();
+        },
+      });
+
   }
+
+
 
   // loadMap(): void {
   //   const loader = new Loader({

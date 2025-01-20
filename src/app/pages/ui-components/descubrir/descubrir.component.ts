@@ -59,6 +59,7 @@ export class DescubrirComponent implements OnInit {
   lng : number;
   radio : number = 5;
   hasUbicacion:boolean = false;
+  permissionState: 'granted' | 'denied' | 'prompt' | null = null;
 
 
 
@@ -72,68 +73,85 @@ export class DescubrirComponent implements OnInit {
 
   ngOnInit(): void {
     this.palabraClave = "";
-    this.checkGeolocationPermission();
-   
+    this.checkGeolocationPermissionAndLoadData();
+    this.callData();
   }
   
 
-  checkGeolocationPermission(): void {
+  checkGeolocationPermissionAndLoadData(): void {
+    // Verificar soporte de geolocalización y permisos
     if (!navigator.permissions || !navigator.geolocation) {
-      console.error("Geolocalización no soportada en este navegador");
+      console.error('Geolocalización no soportada en este navegador.');
       this.hasUbicacion = false;
       return;
     }
   
+    // Consultar el estado del permiso
     navigator.permissions.query({ name: 'geolocation' }).then((result) => {
       if (result.state === 'granted') {
-        // Permiso otorgado
-        this.getUbicacion();
+        // Permiso otorgado, cargar datos
+        this.getUbicacionAndLoadData();
       } else if (result.state === 'prompt') {
-        // Pendiente de solicitar al usuario
-        this.requestUbicacion();
+        // Permiso no definido, solicitarlo
+        this.requestUbicacionAndLoadData();
       } else {
         // Permiso denegado
-        console.warn("Permiso de geolocalización denegado");
+        console.warn('Permiso de geolocalización denegado.');
         this.hasUbicacion = false;
       }
-    }).catch((error) => {
-      console.error("Error al consultar permisos de geolocalización:", error);
-      this.hasUbicacion = false;
+  
+      // Detectar cambios en los permisos dinámicamente
+      result.onchange = () => {
+        if (result.state === 'granted') {
+          this.getUbicacionAndLoadData();
+        }
+      };
     });
   }
-
-
-  getUbicacion(): void {
+  
+  // Obtener ubicación y cargar datos
+  getUbicacionAndLoadData(): void {
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        // Actualizar coordenadas y estado
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
-        this.radio = 30; 
+        this.radio = 30; // Configurar un radio predeterminado
         this.hasUbicacion = true;
-        this.callData(); 
+  
+        // Llamar a la lógica de carga de datos
+        this.callData();
       },
       (error) => {
-        console.error("Error al obtener la ubicación:", error);
+        console.error('Error al obtener la ubicación:', error);
         this.hasUbicacion = false;
       }
     );
   }
   
-  requestUbicacion(): void {
+  // Solicitar permisos y cargar datos
+  requestUbicacionAndLoadData(): void {
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        // Actualizar coordenadas y estado
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
-        this.radio = 30; 
+        this.radio = 30; // Configurar un radio predeterminado
         this.hasUbicacion = true;
-        this.callData(); 
+  
+        // Llamar a la lógica de carga de datos
+        this.callData();
       },
       (error) => {
-        console.error("Error al obtener la ubicación o permiso denegado:", error);
+        console.error('Error al obtener la ubicación o permiso denegado:', error);
         this.hasUbicacion = false;
+        if (error.code === error.PERMISSION_DENIED) {
+          alert('Permiso denegado. Habilita la geolocalización en tu navegador.');
+        }
       }
     );
   }
+
 
 
   public getServerData(event:PageEvent){
