@@ -17,8 +17,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from 'src/app/services/auth.service';
 import { TallerService } from 'src/app/services/taller.service';
 
-
-interface productcards {
+interface ProductCard {
   id: number;
   imgSrc: string;
   title: string;
@@ -38,102 +37,115 @@ interface productcards {
     ReactiveFormsModule,
     CdkScrollable,
     MatButtonModule,
-    MatTooltipModule, 
-    MatCardModule, 
-    MatInputModule, 
+    MatTooltipModule,
+    MatCardModule,
+    MatInputModule,
     MatCheckboxModule,
     TablerIconsModule,
     NgxSpinnerModule,
-    MatPaginator
+    MatPaginator,
   ],
   templateUrl: './descubrir.component.html',
-  styleUrl: './descubrir.component.scss'
+  styleUrl: './descubrir.component.scss',
 })
 export class DescubrirComponent implements OnInit {
-
-  pageIndex:number;
-  length:number;
-  palabraClave: string;
+  pageIndex: number = 0;
+  length: number = 0;
+  palabraClave: string = '';
   talleres: any[] = [];
-  lat : number;
-  lng : number;
-  radio : number = 5;
-  hasUbicacion:boolean = false;
+  lat: number = 0;
+  lng: number = 0;
+  radio: number = 30; // Radio predeterminado
+  hasUbicacion: boolean = false;
   permissionState: 'granted' | 'denied' | 'prompt' | null = null;
-
-
 
   constructor(
     private router: Router,
     private tallerService: TallerService,
     private spinner: NgxSpinnerService,
-    private authService : AuthService
-  ) { }
-
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.palabraClave = "";
-    this.getUbicacionAndLoadData();
+    this.initializeData();
+  }
+
+  private initializeData(): void {
+    this.checkGeolocationPermission();
+  }
+
+  // Verificar permisos de ubicación
+  private checkGeolocationPermission(): void {
+    if ('permissions' in navigator) {
+      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+        this.permissionState = result.state;
+        if (result.state === 'granted') {
+          this.getUbicacionAndLoadData();
+        } else if (result.state === 'prompt') {
+          this.requestUbicacionAndLoadData();
+        } else {
+          console.warn('El permiso de ubicación fue denegado.');
+        }
+      });
+    } else {
+      // Si el navegador no soporta Permissions API
+      this.requestUbicacionAndLoadData();
+    }
+  }
+
+  // Obtener ubicación del usuario
+  private getUbicacionAndLoadData(): void {
+    navigator.geolocation.getCurrentPosition(
+      (position) => this.updateUbicacion(position),
+      (error) => this.handleGeolocationError(error)
+    );
+  }
+
+  // Solicitar permiso para ubicación
+  private requestUbicacionAndLoadData(): void {
+    navigator.geolocation.getCurrentPosition(
+      (position) => this.updateUbicacion(position),
+      (error) => this.handleGeolocationError(error)
+    );
+  }
+
+  // Actualizar la ubicación del usuario
+  private updateUbicacion(position: GeolocationPosition): void {
+    this.lat = position.coords.latitude;
+    this.lng = position.coords.longitude;
+    this.radio = 30; // Radio predeterminado
+    this.hasUbicacion = true;
     this.callData();
   }
-  
 
-  
-  // Obtener ubicación y cargar datos
-  getUbicacionAndLoadData(): void {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        // Actualizar coordenadas y estado
-        this.lat = position.coords.latitude;
-        this.lng = position.coords.longitude;
-        this.radio = 30; // Configurar un radio predeterminado
-        this.hasUbicacion = true;
-  
-        // Llamar a la lógica de carga de datos
-        this.callData();
-      },
-      (error) => {
-        console.error('Error al obtener la ubicación:', error);
-        this.hasUbicacion = false;
-      }
-    );
-  }
-  
-  // Solicitar permisos y cargar datos
-  requestUbicacionAndLoadData(): void {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        // Actualizar coordenadas y estado
-        this.lat = position.coords.latitude;
-        this.lng = position.coords.longitude;
-        this.radio = 30; // Configurar un radio predeterminado
-        this.hasUbicacion = true;
-  
-        // Llamar a la lógica de carga de datos
-        this.callData();
-      },
-      (error) => {
-        console.error('Error al obtener la ubicación o permiso denegado:', error);
-        this.hasUbicacion = false;
-      }
-    );
+  // Manejo de errores de geolocalización
+  private handleGeolocationError(error: GeolocationPositionError): void {
+    console.error('Error al obtener la ubicación:', error.message);
+    this.hasUbicacion = false;
   }
 
-
-
-  public getServerData(event:PageEvent){
+  // Paginación y carga de datos
+  public getServerData(event: PageEvent): void {
     this.callData(event);
   }
 
-  public callData(event?:PageEvent){
-    if(this.hasUbicacion){
-      let pageNum = event != null ? (event.pageIndex + 1) : 1;
-      let pageSize = event != null ? event.pageSize : 12;
-      this.spinner.show();
-      this.tallerService.getTalleresPorGeo(pageNum, pageSize, this.palabraClave, this.lat , this.lng , this.radio).subscribe({
+  // Carga de datos desde el servicio
+  public callData(event?: PageEvent): void {
+    if (!this.hasUbicacion) {
+      console.warn('No se puede cargar datos sin ubicación.');
+      return;
+    }
+
+    const pageNum = event ? event.pageIndex + 1 : 1;
+    const pageSize = event ? event.pageSize : 12;
+
+    this.spinner.show();
+    this.tallerService
+      .getTalleresPorGeo(pageNum, pageSize, this.palabraClave, this.lat, this.lng, this.radio)
+      .subscribe({
         next: (response) => {
           this.spinner.hide();
-          this.pageIndex = (response.pageNum - 1);
+          this.pageIndex = response.pageNum - 1;
           this.length = response.total;
           this.talleres = response.list;
         },
@@ -142,21 +154,23 @@ export class DescubrirComponent implements OnInit {
           console.error('Error al cargar los talleres:', err);
         },
       });
-    }
-    
   }
 
-  navigateTo(epresaId: number): void {
-    this.router.navigate([`/locales/detalle-empresa/${epresaId}`]);
+  // Navegación a detalle de empresa
+  navigateTo(empresaId: number): void {
+    this.router.navigate([`/locales/detalle-empresa/${empresaId}`]);
   }
 
-
-  iraMisVehiculos(){
+  // Navegación a mis vehículos
+  iraMisVehiculos(): void {
     this.router.navigate([`/client/cars`]);
   }
 
-  isUserClient(){
-    return this.authService.isAuthenticated() 
-              && this.authService.getProfileFromToken() === 2;
+  // Validar si el usuario es cliente
+  isUserClient(): boolean {
+    return (
+      this.authService.isAuthenticated() &&
+      this.authService.getProfileFromToken() === 2
+    );
   }
 }
