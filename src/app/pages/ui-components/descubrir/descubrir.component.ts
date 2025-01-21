@@ -71,71 +71,39 @@ export class DescubrirComponent implements OnInit {
   }
 
   private initializeData(): void {
-    this.checkGeolocationPermission();
+    // Cargar los datos inicialmente sin geolocalización
+    this.callData(); 
+    // Solicitar geolocalización de manera asíncrona
+    this.getUbicacionAndLoadData();
   }
 
-  // Verificar permisos de ubicación
-  private checkGeolocationPermission(): void {
-    if ('permissions' in navigator) {
-      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-        this.permissionState = result.state;
-        if (result.state === 'granted') {
-          this.getUbicacionAndLoadData();
-        } else if (result.state === 'prompt') {
-          this.requestUbicacionAndLoadData();
-        } else {
-          console.warn('El permiso de ubicación fue denegado.');
-        }
-      });
-    } else {
-      // Si el navegador no soporta Permissions API
-      this.requestUbicacionAndLoadData();
+  // Obtener la geolocalización y cargar datos cuando esté disponible
+  private async getUbicacionAndLoadData(): Promise<void> {
+    try {
+      const position = await this.getGeolocation(); // Esperar la geolocalización
+      this.updateUbicacion(position); // Actualizar ubicación
+      this.callData(); // Cargar datos con la nueva ubicación
+    } catch (error) {
+      console.error('Error al obtener la ubicación:', error);
     }
   }
 
-  // Obtener ubicación del usuario
-  private getUbicacionAndLoadData(): void {
-    navigator.geolocation.getCurrentPosition(
-      (position) => this.updateUbicacion(position),
-      (error) => this.handleGeolocationError(error)
-    );
+  // Obtener geolocalización como promesa
+  private getGeolocation(): Promise<GeolocationPosition> {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+    });
   }
 
-  // Solicitar permiso para ubicación
-  private requestUbicacionAndLoadData(): void {
-    navigator.geolocation.getCurrentPosition(
-      (position) => this.updateUbicacion(position),
-      (error) => this.handleGeolocationError(error)
-    );
-  }
-
-  // Actualizar la ubicación del usuario
+  // Actualizar los datos de ubicación
   private updateUbicacion(position: GeolocationPosition): void {
     this.lat = position.coords.latitude;
     this.lng = position.coords.longitude;
-    this.radio = 30; // Radio predeterminado
     this.hasUbicacion = true;
-    this.callData();
   }
 
-  // Manejo de errores de geolocalización
-  private handleGeolocationError(error: GeolocationPositionError): void {
-    console.error('Error al obtener la ubicación:', error.message);
-    this.hasUbicacion = false;
-  }
-
-  // Paginación y carga de datos
-  public getServerData(event: PageEvent): void {
-    this.callData(event);
-  }
-
-  // Carga de datos desde el servicio
+  // Llamada para obtener los talleres (con o sin ubicación)
   public callData(event?: PageEvent): void {
-    if (!this.hasUbicacion) {
-      console.warn('No se puede cargar datos sin ubicación.');
-      return;
-    }
-
     const pageNum = event ? event.pageIndex + 1 : 1;
     const pageSize = event ? event.pageSize : 12;
 
@@ -154,6 +122,11 @@ export class DescubrirComponent implements OnInit {
           console.error('Error al cargar los talleres:', err);
         },
       });
+  }
+
+  // Paginación y carga de datos
+  public getServerData(event: PageEvent): void {
+    this.callData(event);
   }
 
   // Navegación a detalle de empresa
