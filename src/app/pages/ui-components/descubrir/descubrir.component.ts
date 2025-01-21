@@ -73,41 +73,11 @@ export class DescubrirComponent implements OnInit {
 
   ngOnInit(): void {
     this.palabraClave = "";
-    this.checkGeolocationPermissionAndLoadData();
+    this.getUbicacionAndLoadData();
     this.callData();
   }
   
 
-  checkGeolocationPermissionAndLoadData(): void {
-    // Verificar soporte de geolocalización y permisos
-    if (!navigator.permissions || !navigator.geolocation) {
-      console.error('Geolocalización no soportada en este navegador.');
-      this.hasUbicacion = false;
-      return;
-    }
-  
-    // Consultar el estado del permiso
-    navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-      if (result.state === 'granted') {
-        // Permiso otorgado, cargar datos
-        this.getUbicacionAndLoadData();
-      } else if (result.state === 'prompt') {
-        // Permiso no definido, solicitarlo
-        this.requestUbicacionAndLoadData();
-      } else {
-        // Permiso denegado
-        console.warn('Permiso de geolocalización denegado.');
-        this.hasUbicacion = false;
-      }
-  
-      // Detectar cambios en los permisos dinámicamente
-      result.onchange = () => {
-        if (result.state === 'granted') {
-          this.getUbicacionAndLoadData();
-        }
-      };
-    });
-  }
   
   // Obtener ubicación y cargar datos
   getUbicacionAndLoadData(): void {
