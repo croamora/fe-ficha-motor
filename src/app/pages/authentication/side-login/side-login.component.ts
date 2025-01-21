@@ -28,6 +28,7 @@ import { StorageService } from 'src/app/services/storage.service';
     NgxSpinnerModule
   ],
   templateUrl: './side-login.component.html',
+  styleUrl: './side-login.component.scss',
 })
 export class AppSideLoginComponent implements OnInit {
 
