@@ -145,9 +145,6 @@ export class DescubrirComponent implements OnInit {
       (error) => {
         console.error('Error al obtener la ubicación o permiso denegado:', error);
         this.hasUbicacion = false;
-        if (error.code === error.PERMISSION_DENIED) {
-          alert('Permiso denegado. Habilita la geolocalización en tu navegador.');
-        }
       }
     );
   }
