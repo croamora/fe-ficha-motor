@@ -43,12 +43,17 @@
 
        <!-- Carrusel de Imágenes -->
 
-      <div *ngIf="taller?.banners && taller?.banners.length > 0; else loading">
+       <div *ngIf="taller?.banners && taller?.banners.length > 0; else loading">
         <owl-carousel-o [options]="carouselOptions">
           <ng-container *ngFor="let image of taller?.banners">
             <ng-template carouselSlide>
               <mat-card>
-                <img [src]="image.img" alt="Image" class="carousel-image" />
+                <!-- Envolvemos la imagen en un enlace -->
+                <a [href]="image.link" target="_blank" *ngIf="image.link">
+                  <img [src]="image.img" alt="Image" class="carousel-image" />
+                </a>
+                <!-- Si no hay enlace, mostramos solo la imagen -->
+                <img *ngIf="!image.link" [src]="image.img" alt="Image" class="carousel-image" />
               </mat-card>
             </ng-template>
           </ng-container>
