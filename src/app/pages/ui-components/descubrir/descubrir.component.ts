@@ -56,7 +56,7 @@ export class DescubrirComponent implements OnInit {
   lat: number = 0;
   lng: number = 0;
   radio: number = 30; // Radio predeterminado
-  hasUbicacion: boolean = false;
+  hasUbicacion: boolean = true;
   permissionState: 'granted' | 'denied' | 'prompt' | null = null;
 
   constructor(
