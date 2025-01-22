@@ -52,12 +52,6 @@ export const navItems: NavItem[] = [
         bgcolor: 'accent',
         route: '/store/config/services',
       },
-      {
-        displayName: 'Valores',
-        iconName: 'database-dollar',
-        bgcolor: 'accent',
-        route: '/store/config/prices',
-      },
     ]
   },
 ];

@@ -24,4 +24,11 @@ export class UserService {
         let finalurl = this.apiUrl + '/clients?pageNum='+pageNum+'&pageSize='+pageSize+'&palabraClave='+ palabraClave
         return this.http.get<PaginationModel>(finalurl, { withCredentials: true });
     }
+
+
+    getUsersStore(idStore: number, pageNum: number, pageSize: number, palabraClave: string) : Observable<PaginationModel>{
+        let finalurl = this.apiUrl + '/store/' + idStore + '?pageNum='+pageNum+'&pageSize='+pageSize+'&palabraClave='+ palabraClave
+        return this.http.get<PaginationModel>(finalurl, { withCredentials: true });
+    }
+    
 }

@@ -139,3 +139,16 @@
     align-items: center;
     gap: 10px;
   }
+
+
+::ng-deep .timepicker__header {
+    background-color: #002875 !important; 
+}
+  
+::ng-deep .clock-face__number[_ngcontent-ng-c3742815079] > span.active[_ngcontent-ng-c3742815079] {
+  background-color: #002875 !important; 
+}
+
+::ng-deep .timepicker-button[_ngcontent-ng-c2291525576] {
+  color: #002875 !important; 
+}

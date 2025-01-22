@@ -24,6 +24,12 @@ export const navItems: NavItem[] = [
     route: '/admin/brands',
   },
   {
+    displayName: 'Publicidad',
+    iconName: 'brand-abstract',
+    bgcolor: 'error',
+    route: '/admin/ads',
+  },
+  {
     displayName: 'Usuarios',
     iconName: 'users',
     bgcolor: 'error',
