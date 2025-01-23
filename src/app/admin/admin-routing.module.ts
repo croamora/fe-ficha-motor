@@ -6,6 +6,7 @@ import { AdminBrandsComponent } from './component/admin-brands/admin-brands.comp
 import { AdminModelsComponent } from './component/admin-models/admin-models.component';
 import { AdminStoreFormComponent } from './component/admin-store-form/admin-store-form.component';
 import { AdminUsersComponent } from './component/admin-users/admin-users.component';
+import { AdminAdsComponent } from './component/admin-ads/admin-ads.component';
 
 export const adminRoutes: Routes = [
   {
@@ -39,6 +40,11 @@ export const adminRoutes: Routes = [
         path: 'users',
         component: AdminUsersComponent,
       },
+      {
+        path: 'ads',
+        component: AdminAdsComponent,
+      },
+      
     ],
   },
 ];

@@ -24,7 +24,7 @@ export const navItems: NavItem[] = [
     route: '/admin/brands',
   },
   {
-    displayName: 'Publicidad',
+    displayName: 'ADS',
     iconName: 'brand-abstract',
     bgcolor: 'error',
     route: '/admin/ads',

@@ -1,0 +1,46 @@
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-content class="b-t-1">
+        <div class="row">
+            <div class="col-md-12">
+
+
+
+                <div class="container">
+                                
+                    <div class="header">
+                        
+                        <button mat-raised-button color="primary" (click)="agregarAds()">Agregar Ads</button>
+                    </div>
+                
+                </div>
+
+
+                <div class="row" style="margin-top: 20px;">
+                    @for(ad of ads; track ad.imagenPublicidad.id) {
+                    <div class="col-sm-6 col-lg-3">
+                        <mat-card class="cardWithShadow taller overflow-hidden" style="cursor: pointer;">
+                            <a>
+                                <img src="{{ ad.imagenPublicidad.img }}" alt="imgSrc" class="w-100" style="height: 200px;" mat-card-image />
+                            </a>
+                            <mat-card-content class="p-b-24 p-t-12 position-relative" style="padding: 10px;">
+                                <!-- <button mat-mini-fab color="primary" class="icon-30 cart-btn" matTooltip="Add to Cart">
+                                    <i-tabler name="map-pin" class="icon-16"></i-tabler>
+                                </button> -->
+                               
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    }
+
+                </div>
+                
+                
+                
+                <!-- Paginador -->
+                <mat-paginator [length]="length" [pageSize]="12" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" (page)="getServerData($event)">
+                </mat-paginator>
+
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
