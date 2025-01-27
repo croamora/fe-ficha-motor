@@ -1,0 +1,13 @@
+
+::ng-deep .mdc-button__label {
+    display: flex; /* Asegura que el ícono y el texto se alineen correctamente */
+    align-items: flex-start; /* Alinea el contenido hacia la parte superior */
+    gap: 4px; /* Espacio entre el ícono y el texto */
+}
+  
+.button-text {
+    font-size: 14px; /* Ajusta el tamaño del texto */
+    position: relative;
+    font-weight: bold;
+    top: 1px; /* Mueve el texto ligeramente hacia arriba */
+}

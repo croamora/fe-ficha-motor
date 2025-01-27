@@ -22,7 +22,6 @@ import { CategoriaService } from 'src/app/services/categoria.service';
 import { MatRadioModule } from '@angular/material/radio';
 import { TallerService } from 'src/app/services/taller.service';
 import { UserService } from 'src/app/services/user.service';
-import { ClientUser } from 'src/app/models/clientUser-model';
 import { UserModel } from 'src/app/models/user-model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -159,7 +158,6 @@ export class AdminStoreFormComponent implements OnInit {
           );
         }
   
-        // // Si tiene usuarios asignados
         if (tallerData.usuarios) {
           const usuariosArray = this.usuarioForm.get('selectedUsuarios') as FormArray;
           // Limpiar el array si estás cargando los usuarios en una edición

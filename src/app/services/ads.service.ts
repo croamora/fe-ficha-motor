@@ -9,7 +9,7 @@ import { Servicio } from '../models/servicio-model';
 @Injectable({ providedIn: 'root' })
 export class AdsService {
 
-   
+
     private readonly apiUrl = environment.apiEndpoint + 'ads';
 
     constructor(private http:HttpClient) {}
@@ -20,16 +20,19 @@ export class AdsService {
         return this.http.get<PaginationModel>(finalurl, { withCredentials: true });
     }
 
+    getAdsById(adsId: string) : Observable<any> {
+        return this.http.get<any>(this.apiUrl + '/' + adsId, { withCredentials: true });
+    }
 
-    // createServicio(newServicio: Servicio) : Observable<any> {
-    //     return this.http.post<any>(this.apiUrl  + "/" + newServicio.idTaller, newServicio, { withCredentials: true });
-    // }
+    createAds(adsToSend: FormData) : Observable<any> { 
+        return this.http.post(this.apiUrl, adsToSend);
+    }
 
-    // updateServicio(servicio: Servicio) : Observable<any> {
-    //     return this.http.put<any>(this.apiUrl  + "/" + servicio.idTaller, servicio, { withCredentials: true });
-    // }
+    updaAds(id: any, adsToSend: FormData) : Observable<any> { 
+        return this.http.put(this.apiUrl + '/' + id, adsToSend);
+    }
 
-    // deleteServicio(id: number) : Observable<any>{
-    //     return this.http.delete(this.apiUrl + '/' + id, { withCredentials: true });
-    // }
+    deleteAds(id: number) : Observable<any>{
+        return this.http.delete(this.apiUrl + '/' + id, { withCredentials: true });
+    }
 }

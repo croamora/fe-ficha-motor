@@ -1,0 +1,130 @@
+<mat-card class="cardWithShadow theme-card" style="margin-bottom: 10px;margin-top: -20px;">
+    <mat-card-header>
+      <button mat-flat-button color="primary" (click)="volver()">
+        <i-tabler class="custom-icon" name="arrow-left"></i-tabler>
+        <span class="button-text">Volver</span>
+      </button>
+    </mat-card-header>
+  </mat-card>
+  
+  <mat-card class="cardWithShadow theme-card overflow-hidden">
+    <mat-card-content class="b-t-1">
+      <div class="row align-items-start">
+  
+        <!-- Contenedor para los campos del formulario -->
+        <div class="col-md-8">
+            <form [formGroup]="adsForm">
+  
+                <!-- Imagen Principal -->
+                <div class="upload-container">
+                <label for="imgUpload" class="custom-upload-label">Imagen Principal:</label>
+                <input
+                    id="imgUpload"
+                    type="file"
+                    [formControlName]="'img'"
+                    (change)="onFileChange($event, 'img')"
+                    accept="image/*"
+                    class="custom-upload-input"
+                />
+                </div>
+    
+                <!-- URL -->
+                <mat-form-field appearance="outline" class="w-100" color="primary">
+                <mat-label>URL</mat-label>
+                <input matInput formControlName="url" />
+                <mat-error *ngIf="adsForm.get('url')?.touched && adsForm.get('url')?.invalid">
+                    <span *ngIf="adsForm.get('url')?.hasError('required')">
+                    La dirección es obligatoria.
+                    </span>
+                </mat-error>
+                </mat-form-field>
+            </form>
+        
+        </div>
+  
+        <!-- Contenedor para la imagen -->
+        <div class="col-md-4 text-center">
+          <div *ngIf="imagen" class="banner-container">
+            <img [src]="imagen" alt="Banner Image" class="banner-img" />
+          </div>
+        </div>
+  
+      </div>
+
+      <mat-divider style="margin: 20px;"></mat-divider>
+
+      <div>
+        
+        <label for="imgUpload" class="custom-upload-label">Tiendas donde se mostrará la imagen:</label>
+
+        <div class="container row align-items-end button-container">
+                                
+            <div class="header">
+                <div>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Filtrar Tienda</mat-label>
+                        <input matInput [(ngModel)]="palabraClave" (keydown.enter)="callData()" placeholder="Escribe aquí..." />
+                    </mat-form-field>
+                    <button mat-raised-button color="primary"
+                        (click)="callData()"
+                        style="height: 50px;
+                                margin-left: 10px;" >
+                            <i-tabler class="custom-icon" name="search"></i-tabler>
+                        </button>
+                </div>
+            </div>
+        
+        </div>
+        
+        <table mat-table [dataSource]="tiendas">
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef>
+              </th>
+              <td mat-cell *matCellDef="let tienda">
+                <mat-checkbox
+                  [checked]="isTiendaSelected(tienda)"
+                  (change)="toggleTiendaSelection(tienda, $event.checked)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="img">
+              <th mat-header-cell *matHeaderCellDef>Perfil</th>
+              <td mat-cell *matCellDef="let taller">
+                <div class="d-flex align-items-center">
+                  <img [src]="taller.imgProfile" alt="users" width="50" class="rounded-circle" />
+              </div>
+            </ng-container>
+          
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>Nombre</th>
+              <td mat-cell *matCellDef="let taller">{{ taller.nombre }}</td>
+            </ng-container>
+          
+            
+          
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+           <!-- Paginador -->
+           <mat-paginator [length]="length" [pageSize]="6" [pageSizeOptions]="[6, 12, 24]" (page)="getServerData($event)">
+        </mat-paginator>
+
+      </div>
+      <div class="row align-items-end button-container">
+
+            <!-- Botón Guardar -->
+            <button mat-flat-button color="warn" type="button" (click)="eliminarAds()" [disabled]="!isEditMode" style="margin-right: 10px;">
+                Eliminar
+            </button>
+            <!-- Botón Guardar -->
+            <button mat-flat-button color="primary" type="button" (click)="guardar()" [disabled]="adsForm.invalid">
+                Guardar
+            </button>
+      </div>
+
+        
+    </mat-card-content>
+  </mat-card>
+  

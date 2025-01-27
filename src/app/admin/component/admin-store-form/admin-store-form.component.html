@@ -202,24 +202,6 @@
           
         </mat-step>
   
-
-        <!-- Paso 3: publicidad -->
-        <mat-step>
-          <ng-template matStepLabel>Publicidad</ng-template>
-  
-          
-          
-          
-  
-          <div fxLayout="row" fxLayoutAlign="end center" class="stepper-buttons" style="margin-top: 10px;">
-            <button mat-raised-button color="warn" matStepperPrevious>Anterior</button>
-            <button mat-raised-button color="primary" matStepperNext>
-              Siguiente
-            </button>
-          </div>
-          
-        </mat-step>
-        
         
         <!-- Paso 4: Seleccionar Usuarios -->
         <mat-step [stepControl]="usuarioForm">
@@ -277,7 +259,7 @@
             </table>
 
               <!-- Paginador -->
-              <mat-paginator [length]="length" [pageSize]="12" [pageSizeOptions]="[5, 10, 20]" (page)="getServerData($event)">
+              <mat-paginator [length]="length" [pageSize]="12" [pageSizeOptions]="[12, 24, 50]" (page)="getServerData($event)">
               </mat-paginator>
 
             <div fxLayout="row" fxLayoutAlign="end center" class="stepper-buttons" style="margin-top: 10px;">

@@ -24,6 +24,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { AdsService } from 'src/app/services/ads.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { UserService } from 'src/app/services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-ads',
@@ -99,7 +100,13 @@ export class AdminAdsComponent implements OnInit {
 
 
   agregarAds(){
-
+    this.router.navigate(['/admin/ads/form']);
   }
 
+
+
+
+  navigateTo(empresaId: number): void {
+    this.router.navigate([`/admin/ads/form/${empresaId}`]);
+  }
 }

@@ -1,0 +1,54 @@
+<mat-card class="cardWithShadow theme-card" style="margin-bottom: 10px;margin-top: -20px;">
+    <mat-card-header>
+      <button mat-flat-button color="primary" (click)="volver()">
+        <i-tabler class="custom-icon" name="arrow-left"></i-tabler>
+        <span class="button-text">Volver</span>
+      </button>
+    </mat-card-header>
+  </mat-card>
+  
+  <mat-card class="cardWithShadow theme-card overflow-hidden">
+    <mat-card-content class="b-t-1">
+      <div class="row">
+        <div class="col-md-12">
+          <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel [expanded]="panel1Open" [disabled]="panel1Disabled">
+              <mat-expansion-panel-header>
+                <mat-panel-title> Datos del Vehículo </mat-panel-title>
+                <mat-panel-description>
+                    <div *ngIf="order.vehicle.id" >{{order.vehicle.patente + ' - ' + order.vehicle.marca.marca + ' ' + order.vehicle.modelo.modelo + ' ' + order.vehicle.anio}}</div>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+                <app-work-order-vehicle-form
+                    [vehicle]="order.vehicle" 
+                    (formValidChange)="onFormValidChange($event)">
+                </app-work-order-vehicle-form>
+
+            </mat-expansion-panel>
+  
+            <mat-expansion-panel [expanded]="panel2Open" [disabled]="panel2Disabled">
+              <mat-expansion-panel-header>
+                <mat-panel-title> Destination </mat-panel-title>
+                <mat-panel-description>
+                  Type the country name
+                  <mat-icon>map</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+  
+            <mat-expansion-panel [expanded]="panel3Open" [disabled]="panel3Disabled">
+              <mat-expansion-panel-header>
+                <mat-panel-title> Day of the trip </mat-panel-title>
+                <mat-panel-description>
+                  Inform the date you wish to travel
+                  <mat-icon>date_range</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  

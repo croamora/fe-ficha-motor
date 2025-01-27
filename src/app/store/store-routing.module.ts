@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { StoreCotizationsComponent } from './components/store-cotizations/store-cotizations.component';
 import { StoreWorkOrdersComponent } from './components/store-work-orders/store-work-orders.component';
 import { StoreScheduleComponent } from './components/store-schedule/store-schedule.component';
+import { WorkOrderFormComponent } from './components/store-work-orders/components/work-order-form/work-order-form.component';
 
 export const storeRoutes: Routes = [
   {
@@ -20,6 +21,14 @@ export const storeRoutes: Routes = [
       {
         path: 'orders',
         component: StoreWorkOrdersComponent,
+      },
+      {
+        path: 'orders/form',
+        component: WorkOrderFormComponent,
+      },
+      {
+        path: 'orders/form/:id',
+        component: WorkOrderFormComponent,
       },
       {
         path: 'schedule',

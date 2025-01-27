@@ -1,0 +1,114 @@
+
+::ng-deep .mdc-button__label {
+    display: flex; /* Asegura que el ícono y el texto se alineen correctamente */
+    align-items: flex-start; /* Alinea el contenido hacia la parte superior */
+    gap: 4px; /* Espacio entre el ícono y el texto */
+}
+  
+.button-text {
+    font-size: 14px; /* Ajusta el tamaño del texto */
+    position: relative;
+    font-weight: bold;
+    top: 1px; /* Mueve el texto ligeramente hacia arriba */
+}
+
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .custom-upload-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
+  .custom-upload-input {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .custom-upload-input:hover {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  .custom-upload-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.75);
+  }
+  
+  /* Ajusta la imagen para que encaje bien en el espacio */
+.banner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ajusta según sea necesario */
+    width: 100%;
+  }
+  
+  .banner-img {
+    max-width: 100%;
+    max-height: 200px; /* Ajusta la altura máxima según tu diseño */
+    object-fit: cover;
+    border-radius: 8px; /* Opcional: bordes redondeados */
+  }
+  
+  /* Contenedor de subida de imágenes */
+  .upload-container {
+    margin-bottom: 20px;
+  }
+  
+  /* Ajusta los elementos para el espacio entre columnas */
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .col-md-8 {
+    flex: 0 0 66.666%; /* Ajusta el ancho a dos tercios */
+    max-width: 66.666%;
+    padding-right: 15px;
+  }
+  
+  .col-md-4 {
+    flex: 0 0 33.333%; /* Ajusta el ancho a un tercio */
+    max-width: 33.333%;
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px; /* Opcional: para separar el botón del contenido */
+  }
+
+
+  mat-form-field {
+    width: 400px;
+  }
+
+
+  @media only screen and (max-device-width : 480px) {
+  
+    mat-form-field {
+      width: 200px;
+    }
+
+  }
+  
