@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, viewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, viewChild } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -25,6 +25,10 @@ import { TallerService } from 'src/app/services/taller.service';
 import { UserService } from 'src/app/services/user.service';
 import { WorkOrderVehicleFormComponent } from '../work-order-vehicle-form/work-order-vehicle-form.component';
 import { Vehicle } from 'src/app/models/vehicle-model';
+import { WorkOrderClientFormComponent } from '../work-order-client-form/work-order-client-form.component';
+import { User } from 'src/app/models/user-model';
+import { VehiculoService } from 'src/app/services/vehiculo.service';
+import { WorkOrderServicesFormComponent } from '../work-order-services-form/work-order-services-form.component';
 
 @Component({
   selector: 'app-work-order-form',
@@ -50,6 +54,8 @@ import { Vehicle } from 'src/app/models/vehicle-model';
     MatRadioModule,
     FormsModule,
     WorkOrderVehicleFormComponent,
+    WorkOrderClientFormComponent,
+    WorkOrderServicesFormComponent,
   ],
   templateUrl: './work-order-form.component.html',
   styleUrl: './work-order-form.component.scss'
@@ -61,7 +67,7 @@ export class WorkOrderFormComponent implements OnInit {
   order : any = {}
   accordion = viewChild.required(MatAccordion);
   panel1Open : boolean = true;
-  panel2Open : boolean = true;
+  panel2Open : boolean = false;
   panel3Open : boolean = false;
   panel1Disabled : boolean = false;
   panel2Disabled : boolean = true;
@@ -76,7 +82,8 @@ export class WorkOrderFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private regionService: RegionService,
     private categoriaService: CategoriaService,
-    private tallerService: TallerService,
+    private cdr: ChangeDetectorRef,
+    private vehiculoService: VehiculoService,
     private userService: UserService
   ) {}
 
@@ -101,61 +108,85 @@ export class WorkOrderFormComponent implements OnInit {
           "marca": "JAC"
         },
         "anio": 2023,
-        "tipo_combustible": {
+        "tipoCombustible": {
           "id": 1,
           "combustibleName": "Bencina"
         },
-        "tipo_vehiculo": {
+        "tipoVehiculo": {
           "id": 4,
           "vehicleTypeName": "SUV"
         },
         "insert_date": "2025-01-18T17:48:42.315+00:00",
         "update_date": "2025-01-18T17:48:42.315+00:00"
       };
+      this.order.client = {
+        "id": 21,
+      }
+      this.order.services = [
+      ]
     } else {
         this.order.vehicle = new Vehicle();
+        this.order.client = new User();
+        this.order.services = [];
     }
 
-    // // Inicializar formularios
-    // this.tallerForm = this.fb.group({
-    //   nombre: ['', Validators.required],
-    //   direccion: ['', Validators.required],
-    //   telefono: new FormControl('', [
-    //     Validators.required,
-    //     Validators.pattern(/^[0-9]{8}$/), // Valida exactamente 8 dígitos
-    //   ]),
-    //   img: [null, Validators.required],
-    //   imgProfile: [null, Validators.required],
-    //   descripcion: [''],
-    //   latitud: ['', Validators.required],
-    //   longitud: ['', Validators.required],
-    //   idRegion: [null, Validators.required],
-    //   idComuna: [null, Validators.required],
-    // });
-
-    // this.usuarioForm = this.fb.group({
-    //   selectedUsuarios: this.fb.array([]),
-    // });
-
-    // this.loadData();
-
-    // // Si es edición, cargar datos del taller
-    // if (this.isEditMode) {
-    //   this.cargarTaller(tallerId);
-    //   this.tallerForm.get('img')?.clearValidators();
-    //   this.tallerForm.get('imgProfile')?.clearValidators();
-    //   this.tallerForm.updateValueAndValidity();
-    // } 
+    this.checkPanels()
   }
 
 
-  onFormValidChange(isValid: boolean): void {
-    //this.isFormComplete = isValid;
-
-    // Aquí puedes habilitar botones o realizar otras acciones
-    console.log('¿Formulario completo?', isValid);
+  onVehicleChange(updatedVehicle: any): void {
+    this.order.vehicle = updatedVehicle;
+    this.loadClient();
+    console.log('vehiculo ',  this.order.vehicle);
+    this.checkPanels()
   }
 
+  loadClient(){
+    if (this.order.vehicle.id) {
+      this.spinner.show();
+      this.vehiculoService.getClientByIdVehicle(this.order.vehicle.id).subscribe({
+        next: (data) => {
+          console.log(data)
+          if(data){
+            this.order.client = data;
+            this.cdr.detectChanges();
+            this.checkPanels()
+          }
+          this.spinner.hide();
+        },
+        error: (err) => { 
+          this.spinner.hide();
+          console.error(err)
+        },
+      });
+    }
+  }
+
+  onClientChange(client: any): void {
+    this.order.client = client;
+    this.checkPanels()
+  }
+
+
+  onServiceChange(services: any): void {
+    console.log(services)
+    this.order.services = services;
+
+  }
+
+  checkPanels(){
+    if (this.order.vehicle.id && !this.order.client.id) {
+      this.panel1Open = false;
+      this.panel2Disabled = false;
+      this.panel2Open = true;
+    } else if(this.order.client.id) {
+      this.panel1Open = false;
+      this.panel2Disabled = false;
+      this.panel2Open = false;
+      this.panel3Disabled = false;
+      this.panel3Open = false;
+    }
+  }
 
   volver(): void {
     this.router.navigate(['/store/orders']);

@@ -7,8 +7,7 @@ import { PaginationModel } from '../models/pagination-model';
 
 @Injectable({ providedIn: 'root' })
 export class VehiculoService {
-       
-    
+      
     private readonly apiUrl = environment.apiEndpoint + 'vehiculo';
 
     constructor(private http:HttpClient) {}
@@ -36,5 +35,13 @@ export class VehiculoService {
 
     save(newVehiculo: any) : Observable<any>{
         return this.http.post<any>(this.apiUrl, newVehiculo, { withCredentials: true });
+    }
+
+    update(newVehiculo: any) : Observable<any>{
+        return this.http.put<any>(this.apiUrl + '/' + newVehiculo.id, newVehiculo, { withCredentials: true });
+    }
+
+    getClientByIdVehicle(id: number) : Observable<any>{
+        return this.http.get<any>(this.apiUrl + '/' + id + '/client' , { withCredentials: true });
     }
 }

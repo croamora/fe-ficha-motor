@@ -55,7 +55,7 @@ export class DescubrirComponent implements OnInit {
   talleres: any[] = [];
   lat: number = 0;
   lng: number = 0;
-  radio: number = 30; // Radio predeterminado
+  radio: number = 1500; // Radio predeterminado
   hasUbicacion: boolean = false;
   permissionState: 'granted' | 'denied' | 'prompt' | null = null;
 
@@ -116,7 +116,7 @@ export class DescubrirComponent implements OnInit {
   private updateUbicacion(position: GeolocationPosition): void {
     this.lat = position.coords.latitude;
     this.lng = position.coords.longitude;
-    this.radio = 30; // Radio predeterminado
+    this.radio = 1500; // Radio predeterminado
     this.hasUbicacion = true;
     this.callData(); // Llamar a los datos nuevamente con la ubicación
   }

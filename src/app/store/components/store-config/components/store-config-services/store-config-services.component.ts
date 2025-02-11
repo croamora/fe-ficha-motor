@@ -44,7 +44,6 @@ import { PrecioServicio, Servicio } from 'src/app/models/servicio-model';
     MatPaginator,
     MatIconModule,
     MatTableModule,
-    MatDialogModule
   ],
   templateUrl: './store-config-services.component.html',
   styleUrl: './store-config-services.component.scss'

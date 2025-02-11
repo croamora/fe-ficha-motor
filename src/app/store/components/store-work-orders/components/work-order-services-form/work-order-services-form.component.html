@@ -1,0 +1,92 @@
+<mat-card-content>
+    <div class="row">
+        <div class="col-md-12">
+
+
+
+            <div class="container">      
+                <div class="header">
+                    <div>
+                        
+                    </div>
+                    <button mat-raised-button color="primary" (click)="agregarServicio()">Agregar Servicio</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <mat-card-content class="b-t-1">
+        <table mat-table [dataSource]="services" multiTemplateDataRows>
+      
+          <!-- Columna Servicio -->
+          <ng-container matColumnDef="servicio">
+            <th mat-header-cell *matHeaderCellDef> Servicio </th>
+            <td mat-cell *matCellDef="let servicio" (click)="toggleRow(servicio)">
+              {{ servicio.servicio }}
+            </td>
+          </ng-container>
+      
+          <!-- Columna Cantidad -->
+          <ng-container matColumnDef="cantidad">
+            <th mat-header-cell class="total-header" *matHeaderCellDef> Cantidad </th>
+            <td mat-cell class="total-cell" *matCellDef="let servicio">
+              <mat-form-field appearance="outline" style="width: 100px; margin: 10px;">
+                <mat-label>Cantidad</mat-label>
+                <input matInput type="number" [(ngModel)]="servicio.cantidad" placeholder="Editar cantidad" required min="1">
+                <mat-hint *ngIf="!servicio.cantidad">Ingrese la cantidad</mat-hint>
+                <mat-error *ngIf="servicio.cantidad < 1">Debe ser mayor a 0</mat-error>
+              </mat-form-field>
+            </td>
+          </ng-container>
+      
+          <!-- Columna Precio -->
+          <ng-container matColumnDef="precio">
+            <th mat-header-cell class="total-header" *matHeaderCellDef> Precio </th>
+            <td mat-cell class="total-cell" *matCellDef="let servicio">
+              <mat-form-field appearance="outline" style="width: 120px; margin: 10px;">
+                <mat-label>Precio</mat-label>
+                <input matInput type="number" [(ngModel)]="servicio.precio.precio" placeholder="Editar precio" required min="0">
+                <mat-hint *ngIf="!servicio.precio.precio">Ingrese un precio</mat-hint>
+                <mat-error *ngIf="servicio.precio.precio < 0">El precio no puede ser negativo</mat-error>
+              </mat-form-field>
+            </td>
+          </ng-container>
+      
+          <!-- Columna Total -->
+          <ng-container matColumnDef="total">
+            <th mat-header-cell class="total-header" *matHeaderCellDef> Total </th>
+            <td mat-cell class="total-cell" *matCellDef="let servicio">
+              {{ servicio.precio.precio * servicio.cantidad | currency: 'CLP':'symbol':'1.0-0' }}
+            </td>
+          </ng-container>
+      
+          <!-- Definir la columna de detalles -->
+          <ng-container matColumnDef="detalle">
+            <td mat-cell *matCellDef="let servicio" colspan="4" [hidden]="!expandedRows.has(servicio)">
+              <mat-card class="detail-panel">
+                <p>Detalles adicionales del servicio: <strong>{{ servicio.servicio }}</strong></p>
+              </mat-card>
+            </td>
+          </ng-container>
+      
+          <!-- Encabezado -->
+          <tr mat-header-row *matHeaderRowDef="['servicio', 'cantidad', 'precio', 'total']"></tr>
+      
+          <!-- Filas principales -->
+          <tr mat-row *matRowDef="let row; columns: ['servicio', 'cantidad', 'precio', 'total'];"
+              class="clickable-row">
+          </tr>
+      
+          <!-- Fila expandible -->
+          <tr mat-row *matRowDef="let row; columns: ['detalle'];" 
+            class="expanded-row" 
+            ></tr>
+      
+        </table>
+      </mat-card-content>
+
+      
+      
+      
+</mat-card-content>

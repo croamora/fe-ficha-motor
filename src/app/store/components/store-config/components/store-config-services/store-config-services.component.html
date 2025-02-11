@@ -50,14 +50,14 @@
                 
                     <!-- Columna Acciones -->
                     <ng-container matColumnDef="acciones">
-                        <th mat-header-cell  class="acciones-header"*matHeaderCellDef>Acciones</th>
+                        <th mat-header-cell  class="acciones-header" *matHeaderCellDef>Acciones</th>
                         <td mat-cell class="acciones-cell" *matCellDef="let servicio">
-                        <button mat-icon-button color="primary" (click)="editarServicio(servicio)">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                        <button mat-icon-button color="warn" [disabled]="!servicio.idTaller" (click)="eliminarServicio(servicio.id)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
+                            <button mat-icon-button color="primary" (click)="editarServicio(servicio)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button color="warn" [disabled]="!servicio.idTaller" (click)="eliminarServicio(servicio.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
                         </td>
                     </ng-container>
                 

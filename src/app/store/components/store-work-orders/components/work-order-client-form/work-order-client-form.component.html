@@ -1,0 +1,131 @@
+<mat-card-content>
+    <form [formGroup]="clientForm" >
+      <div class="form-row">
+        <div style="width: 350px; display: inline-block;">
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email"
+                />
+                <mat-error *ngIf="clientForm.get('email')?.invalid">
+                  Email inválido. Ingrese un email válido.
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div style="width: 20%; display: inline-block; text-align: center;">
+          <button
+            mat-flat-button
+            color="primary"
+            class="search-button"
+            (click)="checkCliente()"
+          >
+            <i-tabler class="custom-icon" name="search"></i-tabler>
+          </button>
+          
+          <button
+            *ngIf="!clientExists"
+            mat-flat-button
+            color="warn"
+            type="button"
+            (click)="changeCliente()"
+          >
+            <i class="ti ti-replace-user"></i>
+          </button>
+        </div>
+      </div>
+    
+
+      <!-- Mostrar el resto del formulario solo si la patente no existe -->
+      <div *ngIf="!clientExists" class="grid-container" >
+
+        <!-- Nombre -->
+        <mat-form-field ppearance="fill" class="full-width">
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="uname" />
+            <mat-hint *ngIf="f['uname'].touched && f['uname'].invalid">
+              <span *ngIf="f['uname'].hasError('required')" class="text-error">El nombre es obligatorio.</span>
+              <span *ngIf="f['uname'].hasError('minlength')" class="text-error">
+                El nombre debe tener al menos 6 caracteres.
+              </span>
+            </mat-hint>
+        </mat-form-field>
+
+        <!-- Teléfono -->
+        <mat-form-field ppearance="fill" class="full-width">
+          <mat-label>Teléfono</mat-label>
+          <span matPrefix>+569&nbsp;</span>
+            <input matInput formControlName="phone" maxlength="8" />
+            <mat-hint *ngIf="f['phone'].touched && f['phone'].invalid">
+              <span *ngIf="f['phone'].hasError('required')" class="text-error">
+                El teléfono es obligatorio.
+              </span>
+              <span *ngIf="f['phone'].hasError('pattern')" class="text-error">
+                El teléfono debe contener exactamente 8 dígitos.
+              </span>
+            </mat-hint>
+        </mat-form-field>
+
+      </div>
+
+      <div>
+          <!-- Checkbox para mostrar o ocultar el mensaje -->
+          <mat-checkbox
+                [checked]="showContact"
+                (change)="toggleShowContact($event.checked)">
+          </mat-checkbox>
+          <mat-label style="font-size: 12px;font-weight: 500;">Agregar otro Contacto</mat-label>
+      </div>
+
+      <div *ngIf="showContact" class="grid-container">
+
+          <!-- Email -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="contactemail" />
+            <mat-error *ngIf="clientForm.get('email')?.invalid">
+              Email inválido. Ingrese un email válido.
+            </mat-error>
+          </mat-form-field>
+
+
+          <!-- Nombre -->
+          <mat-form-field ppearance="fill" class="full-width">
+          <mat-label>Nombre Contacto</mat-label>
+          <input matInput formControlName="contactuname" />
+            <mat-hint *ngIf="f['contactuname'].touched && f['contactuname'].invalid">
+              <span *ngIf="f['contactuname'].hasError('required')" class="text-error">El nombre es obligatorio.</span>
+              <span *ngIf="f['contactuname'].hasError('minlength')" class="text-error">
+                El nombre debe tener al menos 6 caracteres.
+              </span>
+            </mat-hint>
+          </mat-form-field>
+
+          <!-- Teléfono -->
+          <mat-form-field ppearance="fill" class="full-width">
+          <mat-label>Teléfono Contacto</mat-label>
+          <span matPrefix>+569&nbsp;</span>
+            <input matInput formControlName="contactphone" maxlength="8" />
+            <mat-hint *ngIf="f['contactphone'].touched && f['contactphone'].invalid">
+              <span *ngIf="f['contactphone'].hasError('required')" class="text-error">
+                El teléfono es obligatorio.
+              </span>
+              <span *ngIf="f['contactphone'].hasError('pattern')" class="text-error">
+                El teléfono debe contener exactamente 8 dígitos.
+              </span>
+            </mat-hint>
+          </mat-form-field>
+
+      </div>
+
+
+      <div class="row align-items-end button-container">
+
+          <!-- Botón Guardar -->
+          <button mat-flat-button color="primary" type="button" (click)="guardar()" [disabled]="clientForm.invalid">
+            <span class="button-text">Siguiente</span>
+            <i-tabler class="custom-icon" name="arrow-right"></i-tabler>
+          </button>
+
+      </div>
+
+    </form>
+</mat-card-content>

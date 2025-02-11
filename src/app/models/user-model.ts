@@ -6,3 +6,14 @@ export interface UserModel{
     email?:string| null;
     phone?: number | null;
 }
+
+
+export class User {
+    id: number | null;
+    
+  
+    constructor(init?: Partial<User>) {
+      this.id = init?.id ?? null;
+    }
+  }
+  

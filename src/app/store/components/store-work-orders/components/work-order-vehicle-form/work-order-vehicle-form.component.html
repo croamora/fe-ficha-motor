@@ -1,130 +1,121 @@
 <mat-card-content>
-
-    <!-- <div *ngIf="!carExists" class="row align-items-center">
-
-        <div class="container">
-            <div class="license-plate">
-              <div class="license-text">
-                <span>{{ patentePreview | slice: 0:2 }}</span>
-                <span class="separator">•</span>
-                <span>{{ patentePreview | slice: 2:4 }}</span>
-                <span class="separator">•</span>
-                <span>{{ patentePreview | slice: 4 }}</span>
-              </div>
-              <div class="license-country">CHILE</div>
-            </div>
-          </div>
-
-    </div> -->
-
-
-
-
-  <form [formGroup]="carForm" (ngSubmit)="onSubmit()">
-
-    <div>
-        <div style="width: 80%;display: inline-block;">
-
-            <mat-form-field appearance="fill"  class="full-width">
-                <mat-label>Patente</mat-label>
-                <input
-                matInput
-                formControlName="patente"
-                maxlength="6"
-                (input)="onPatenteInput($event)"
-                />
-
-                <mat-error *ngIf="carForm.get('patente')?.invalid">
-                Patente inválida. Solo se permiten 8 caracteres alfanuméricos.
-                </mat-error>
-            </mat-form-field>
-
-        </div>
-
-        <div style="width: 20%;display: inline-block;">
-            <button mat-flat-button color="primary" style="    padding: 22px 20px;margin-left: 10px;" (click)="checkPatente()">
-              <i-tabler class="custom-icon" name="search"></i-tabler>
-            </button>
-          </div>
+  <form [formGroup]="carForm" >
+    <!-- Patente y Botón de búsqueda -->
+    <div class="form-row">
+      <div style="width: 200px; display: inline-block;">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Patente</mat-label>
+          <input
+            matInput
+            formControlName="patente"
+            maxlength="6"
+            (input)="onPatenteInput($event)"
+          />
+          <mat-error *ngIf="carForm.get('patente')?.invalid">
+            Patente inválida. Solo se permiten 8 caracteres alfanuméricos.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div style="width: 20%; display: inline-block;">
+        <button
+          mat-flat-button
+          color="primary"
+          class="search-button"
+          (click)="checkPatente()"
+        >
+          <i-tabler class="custom-icon" name="search"></i-tabler>
+        </button>
+      </div>
     </div>
 
-
-
-
     <!-- Mostrar el resto del formulario solo si la patente no existe -->
-    <div *ngIf="!carExists">
-        <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Marca</mat-label>
-            <input
-              matInput
-              [matAutocomplete]="autoMarca"
-              formControlName="marca"
-              [value]="selectedMarca ? selectedMarca.marca : ''"
-              (input)="onMarcaInput($event)"
-            />
-            <mat-autocomplete #autoMarca="matAutocomplete"  [displayWith]="selectedMarca ? selectedMarca.marca : ''" (optionSelected)="onMarcaChange($event.option.value)">
-              <mat-option *ngFor="let marca of (marcasFiltradas | async)" [value]="marca">
-                {{ marca.marca }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+    <div *ngIf="!carExists" class="grid-container">
+      <!-- Marca -->
+      <mat-form-field ppearance="fill" class="full-width">
+        <mat-label>Marca</mat-label>
+        <input
+          matInput
+          formControlName="marca"
+          [matAutocomplete]="marcaAuto"
+          [value]="selectedMarca ? selectedMarca.marca : ''"
+          (input)="onMarcaInput($event)"
+        />
+        <mat-autocomplete 
+          #marcaAuto="matAutocomplete" 
+          [displayWith]="displayMarca"
+          (optionSelected)="onMarcaChange($event.option.value)">
+          <mat-option *ngFor="let marca of marcasFiltradas | async" [value]="marca" >
+            {{ marca.marca }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
 
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Modelo</mat-label>
-            <input
-              matInput
-              [matAutocomplete]="autoModelo"
-              formControlName="modelo"
-              [value]="selectedModelo ? selectedModelo.modelo : ''"
-              (input)="onModeloInput($event)"
-            />
-            <mat-autocomplete #autoModelo="matAutocomplete" [displayWith]="selectedModelo ? selectedModelo.modelo : ''" (optionSelected)="onModeloChange($event.option.value)" >
-              <mat-option *ngFor="let modelo of (modelosFiltrados | async)" [value]="modelo">
-                {{ modelo.modelo }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+      <!-- Modelo -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Modelo</mat-label>
+        <input
+          matInput
+          formControlName="modelo"
+          [matAutocomplete]="autoModelo"
+          [value]="selectedModelo ? selectedModelo.modelo : ''"
+          (input)="onModeloInput($event)"
+        />
+        <mat-autocomplete
+          #autoModelo="matAutocomplete"
+          [displayWith]="displayModelo"
+          (optionSelected)="onModeloChange($event.option.value)"
+        >
+          <mat-option *ngFor="let modelo of (modelosFiltrados | async)" [value]="modelo" >
+            {{ modelo.modelo }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
 
-          <!-- tipo Vehiculo -->
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Tipo de Vehículo</mat-label>
-            <input
-              matInput
-              [matAutocomplete]="tipoVehiculoAC"
-              formControlName="tipoVehiculo"
-              [value]="selectedVehicleType ? selectedVehicleType.vehicleTypeName : ''"
-              (input)="onTipoVehiculoInput($event)"
-              (focus)="onTipoVehiculoInput($event)"
-            />
-            <mat-autocomplete #tipoVehiculoAC="matAutocomplete" [displayWith]="selectedVehicleType ? selectedVehicleType.vehicleTypeName : ''" (optionSelected)="onTipoVehiculoChange($event.option.value)" >
-              <mat-option *ngFor="let vehicleType of (tipoVehiculoFiltrados | async)" [value]="vehicleType">
-                {{ vehicleType.vehicleTypeName }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+      <!-- Tipo de Vehículo -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Tipo de Vehículo</mat-label>
+        <input
+          matInput
+          formControlName="tipoVehiculo"
+          [matAutocomplete]="tipoVehiculoAC"
+          [value]="selectedVehicleType ? selectedVehicleType.vehicleTypeName : ''"
+          (input)="onTipoVehiculoInput($event)"
+        />
+        <mat-autocomplete
+          #tipoVehiculoAC="matAutocomplete"
+          [displayWith]="displayTipoVehiculo"
+          (optionSelected)="onTipoVehiculoChange($event.option.value)"
+          (focus)="onTipoVehiculoInput($event)"
+        >
+          <mat-option *ngFor="let vehicleType of (tipoVehiculoFiltrados | async)" [value]="vehicleType" >
+            {{ vehicleType.vehicleTypeName }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
 
-           <!-- tipo Combustible -->
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Tipo de Combustible</mat-label>
-            <input
-              matInput
-              [matAutocomplete]="tipoCombustibleAC"
-              formControlName="tipoCombustible"
-              [value]="selectedCombustibleType ? selectedCombustibleType.combustibleName : ''"
-              (input)="onTipoCombustibleInput($event)"
-              (focus)="onTipoCombustibleInput($event)"
-            />
-            <mat-autocomplete #tipoCombustibleAC="matAutocomplete" [displayWith]="selectedCombustibleType ? selectedCombustibleType.combustibleName : ''" (optionSelected)="onTipoCombustibleChange($event.option.value)" >
-              <mat-option *ngFor="let combustibleType of (tipoCombustibleFiltrados | async)" [value]="combustibleType">
-                {{ combustibleType.combustibleName }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+      <!-- Tipo de Combustible -->
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Tipo de Combustible</mat-label>
+        <input
+          matInput
+          formControlName="tipoCombustible"
+          [matAutocomplete]="tipoCombustibleAC"
+          [value]="selectedCombustibleType ? selectedCombustibleType.combustibleName : ''"
+          (input)="onTipoCombustibleInput($event)"
+        />
+        <mat-autocomplete
+          #tipoCombustibleAC="matAutocomplete"
+          [displayWith]="displayTipoCombustible"
+          (optionSelected)="onTipoCombustibleChange($event.option.value)"
+          (focus)="onTipoCombustibleInput($event)"
+        >
+          <mat-option *ngFor="let combustibleType of (tipoCombustibleFiltrados | async)" [value]="combustibleType" >
+            {{ combustibleType.combustibleName }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
 
-
-
-
-      <!-- Campo de Año -->
+      <!-- Año -->
       <mat-form-field appearance="fill" class="full-width">
         <mat-label>Año</mat-label>
         <input
@@ -135,10 +126,16 @@
           [max]="currentYear"
         />
       </mat-form-field>
-
-      <!-- <button mat-flat-button color="primary" type="submit" [disabled]="carForm.invalid">
-        Guardar
-      </button> -->
     </div>
   </form>
+
+  <div class="row align-items-end button-container">
+
+      <!-- Botón Guardar -->
+      <button mat-flat-button color="primary" type="button" (click)="guardar()" [disabled]="carForm.invalid">
+        <span class="button-text">Siguiente</span>
+        <i-tabler class="custom-icon" name="arrow-right"></i-tabler>
+      </button>
+  </div>
+
 </mat-card-content>

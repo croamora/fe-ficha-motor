@@ -7,8 +7,8 @@ import { PaginationModel } from '../models/pagination-model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-    
-    
+
+
     
     private readonly apiUrl = environment.apiEndpoint + 'usuario';
 
@@ -29,6 +29,11 @@ export class UserService {
     getUsersStore(idStore: number, pageNum: number, pageSize: number, palabraClave: string) : Observable<PaginationModel>{
         let finalurl = this.apiUrl + '/store/' + idStore + '?pageNum='+pageNum+'&pageSize='+pageSize+'&palabraClave='+ palabraClave
         return this.http.get<PaginationModel>(finalurl, { withCredentials: true });
+    }
+
+    getByEmail(email: string) : Observable<any> {
+        let finalurl = this.apiUrl + '/getByEmail?email=' + email;
+        return this.http.get<any>(finalurl, { withCredentials: true });
     }
     
 }

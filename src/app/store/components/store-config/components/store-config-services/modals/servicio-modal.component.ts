@@ -41,7 +41,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
   ],
   template: `
     <div style="padding: 10px;">
-      <h1 mat-dialog-title>{{ data?.servicio ? 'Editar Servicio' : 'Agregar Servicio' }}</h1>
+      <h1 mat-dialog-title>{{ data.servicio ? 'Editar Servicio' : 'Agregar Servicio' }}</h1>
       <div mat-dialog-content>
         <form [formGroup]="servicioForm">
           <mat-form-field appearance="outline" class="full-width" style="margin-top: 20px;">
@@ -65,7 +65,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
       <div mat-dialog-actions align="end">
         <button mat-button (click)="cerrar()">Cancelar</button>
         <button mat-raised-button color="primary" [disabled]="servicioForm.invalid" (click)="guardar()">
-          {{ data?.servicio ? 'Guardar Cambios' : 'Agregar' }}
+          {{ data.servicio ? 'Guardar Cambios' : 'Agregar' }}
         </button>
       </div>
     </div> 

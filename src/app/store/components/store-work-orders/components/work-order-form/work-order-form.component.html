@@ -21,30 +21,43 @@
               </mat-expansion-panel-header>
 
                 <app-work-order-vehicle-form
-                    [vehicle]="order.vehicle" 
-                    (formValidChange)="onFormValidChange($event)">
+                    [vehicle]="order.vehicle"
+                    (vehicleChange)="onVehicleChange($event)">
                 </app-work-order-vehicle-form>
 
             </mat-expansion-panel>
   
             <mat-expansion-panel [expanded]="panel2Open" [disabled]="panel2Disabled">
               <mat-expansion-panel-header>
-                <mat-panel-title> Destination </mat-panel-title>
+                <mat-panel-title> Datos del Cliente </mat-panel-title>
                 <mat-panel-description>
-                  Type the country name
-                  <mat-icon>map</mat-icon>
+                  <div *ngIf="order.client.id" >{{order.client.name  + ' - +569' + order.client.phone }}</div>
                 </mat-panel-description>
               </mat-expansion-panel-header>
+
+              
+              <app-work-order-client-form
+                    [client]="order.client" 
+                    (clientChange)="onClientChange($event)">
+                </app-work-order-client-form>
+
             </mat-expansion-panel>
   
             <mat-expansion-panel [expanded]="panel3Open" [disabled]="panel3Disabled">
               <mat-expansion-panel-header>
-                <mat-panel-title> Day of the trip </mat-panel-title>
+                <mat-panel-title> Orden de Trabajo </mat-panel-title>
                 <mat-panel-description>
-                  Inform the date you wish to travel
-                  <mat-icon>date_range</mat-icon>
+                  <div > {{ order.services.length + ' servicios agregados' }}</div>
                 </mat-panel-description>
               </mat-expansion-panel-header>
+
+              
+              <app-work-order-services-form
+                    [services]="order.services" 
+                    [idWorkOrder]="order.id" 
+                    (serviceChange)="onServiceChange($event)">
+                </app-work-order-services-form>
+
             </mat-expansion-panel>
           </mat-accordion>
         </div>

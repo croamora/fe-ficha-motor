@@ -43,7 +43,6 @@ import Swal from 'sweetalert2';
     MatPaginator,
     MatIconModule,
     MatTableModule,
-    MatDialogModule
   ],
   templateUrl: './admin-models.component.html',
   styleUrl: './admin-models.component.scss'
